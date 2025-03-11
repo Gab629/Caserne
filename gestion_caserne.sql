@@ -1,0 +1,133 @@
+/*CREATE DATABASE Gestion_Caserne;
+go*/
+Use Gestion_Caserne;
+GO
+
+DROP TABLE IF EXISTS Rapporté;
+DROP TABLE IF EXISTS Incident;
+DROP TABLE IF EXISTS RepartiteurUrgence;
+DROP TABLE IF EXISTS Couvert;
+DROP TABLE IF EXISTS equipementTeam;
+DROP TABLE IF EXISTS vehicule;
+DROP TABLE IF EXISTS equipementPerso;
+DROP TABLE IF EXISTS Pompier;
+DROP TABLE IF EXISTS Equipe;
+DROP TABLE IF EXISTS Caserne;
+DROP TABLE IF EXISTS Equipement;
+DROP TABLE IF EXISTS Incident;
+DROP TABLE IF EXISTS Secteur;
+
+--Création des tables
+
+CREATE TABLE Secteur (
+	idSecteur int PRIMARY KEY,
+	codePostal char (7) CHECK (codePostal LIKE '[A-Z][0-9][A-Z] [0-9][A-Z][0-9]'),
+	nomSecteur nvarchar (50) NOT NULL,
+	limitesGéographique text
+	);
+
+CREATE TABLE Incident (
+	incidentID int IDENTITY (1,1),
+	dateIncident date,
+	adresseIncident varchar (100),
+	idSecteur int,
+	typeIncident nvarchar (30),
+	gravité int NOT NULL, --gravité sur 3 niveaux, niveau 1: petit incident, niveau 2: incident avec blessés, niveau 3: incident sur plusieurs choses et des blessés graves
+	Foreign key(idSecteur) references Secteur(idSecteur),
+	PRIMARY KEY (incidentID, dateIncident, adresseIncident)
+	);
+
+CREATE TABLE Equipement (
+	idEquipement int PRIMARY KEY IDENTITY(1,1),
+	typeEquipement nvarchar (50),
+	statutDisponibilité nvarchar (25) NOT NULL,
+	date_expiration date
+	);
+
+CREATE TABLE Caserne (
+	idCaserne int PRIMARY KEY,
+	nomCaserne nvarchar(100),
+	numeroTelephone varchar (12) NOT NULL CHECK (numeroTelephone LIKE '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'),
+	adresse varchar(100),
+	secteurCouvert1 int,
+	secteurCouvert2 int,
+	FOREIGN KEY (secteurCouvert1) references Secteur(idSecteur),
+	Foreign key (secteurCouvert2) references Secteur(idSecteur)
+	--ajout de secteur couvert pour avoir plus d'infos sur les casernes
+	);
+	
+
+CREATE TABLE Couvert(
+	idSecteur int,
+	idCaserne int,
+	PRIMARY KEY (idSecteur, idCaserne),
+	FOREIGN KEY (idSecteur) REFERENCES Secteur(idSecteur) on delete cascade,
+	FOREIGN KEY (idCaserne) references Caserne(idCaserne) on delete cascade
+	);
+	
+CREATE TABLE Equipe (
+	idEquipe int PRIMARY KEY,
+	nomEquipe nvarchar (30),
+	horaire nvarchar (30) CHECK (horaire in ('matin','après-midi','soir','nuit')),
+	idCaserne int,
+	FOREIGN KEY (idCaserne) REFERENCES Caserne(idCaserne) on delete cascade
+	);
+	
+CREATE TABLE RepartiteurUrgence (
+	numEmploye int PRIMARY KEY identity(1,1),
+	nom nvarchar (50) NOT NULL,
+	prenom nvarchar (50) NOT NULL
+	);
+
+CREATE TABLE Rapporté (
+	incidentId int,
+	dateIncident date,
+	adresseIncident varchar (100),
+	idsecteur int,
+	numEmploye int,
+	idCaserne int,
+	CaserneRenfort int,
+	PRIMARY KEY (incidentId, numEmploye, idCaserne),
+	FOREIGN KEY (incidentId, dateIncident, adresseIncident) REFERENCES Incident(incidentId, dateIncident, adresseIncident) on delete cascade,
+	FOREIGN KEY (numEmploye) REFERENCES RepartiteurUrgence(numEmploye) on delete cascade,
+	FOREIGN KEY (idsecteur) REFERENCES Secteur(idsecteur),
+	FOREIGN KEY (idCaserne) REFERENCES Caserne(idCaserne),
+	FOREIGN KEY (CaserneRenfort) References Caserne(idCaserne)
+	);
+
+CREATE TABLE equipementTeam (
+	idEquipement int,
+	idEquipe int,
+	PRIMARY KEY (idEquipement, idEquipe),
+	FOREIGN KEY (idEquipement) REFERENCES Equipement(idEquipement) on delete cascade,
+	FOREIGN KEY (idEquipe) REFERENCES Equipe(idEquipe) on delete cascade
+	);
+
+CREATE TABLE Vehicule (
+	idVehicule int PRIMARY KEY,
+	typeVehicule nvarchar (30),
+	plaque_immatriculation varchar (7) NOT NULL check (plaque_immatriculation LIKE '[A-Z][0-9][0-9] [A-Z][A-Z][A-Z]'),
+	idEquipe int,
+	FOREIGN KEY (idEquipe) REFERENCES Equipe(idEquipe) on delete cascade
+	);
+
+CREATE TABLE Pompier (
+	idEmploye int PRIMARY KEY identity(1,1),
+	nom varchar (50) NOT NULL,
+	prenom varchar (50) NOT NULL,
+	poste varchar (50),
+	numTel varchar(12) NOT NULL CHECK (numTel LIKE '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'),
+	idEquipe int,
+	FOREIGN KEY (idEquipe) REFERENCES Equipe(idEquipe) on delete cascade
+	);
+
+CREATE TABLE equipementPerso(
+	idEquipement int,
+	idEmploye int,
+	PRIMARY KEY (idEquipement),
+	FOREIGN KEY (idEquipement) REFERENCES Equipement(idEquipement) on delete cascade,
+	FOREIGN KEY (idEmploye) REFERENCES Pompier(idEmploye) on delete cascade
+	);
+
+--insertion de valeurs dans les tables
+select * from Equipe;
