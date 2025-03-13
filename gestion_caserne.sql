@@ -3,7 +3,7 @@ go*/
 Use Gestion_Caserne;
 GO
 
-DROP TABLE IF EXISTS Rapporté;
+DROP TABLE IF EXISTS Rapporte;
 DROP TABLE IF EXISTS Incident;
 DROP TABLE IF EXISTS RepartiteurUrgence;
 DROP TABLE IF EXISTS Couvert;
@@ -17,13 +17,13 @@ DROP TABLE IF EXISTS Equipement;
 DROP TABLE IF EXISTS Incident;
 DROP TABLE IF EXISTS Secteur;
 
---Création des tables
+--Creation des tables
 
 CREATE TABLE Secteur (
 	idSecteur int PRIMARY KEY,
 	codePostal char (7) CHECK (codePostal LIKE '[A-Z][0-9][A-Z] [0-9][A-Z][0-9]'),
 	nomSecteur nvarchar (50) NOT NULL,
-	limitesGéographique text
+	limitesGeographique text
 	);
 
 CREATE TABLE Incident (
@@ -32,7 +32,7 @@ CREATE TABLE Incident (
 	adresseIncident varchar (100),
 	idSecteur int,
 	typeIncident nvarchar (30),
-	gravité int NOT NULL, --gravité sur 3 niveaux, niveau 1: petit incident, niveau 2: incident avec blessés, niveau 3: incident sur plusieurs choses et des blessés graves
+	gravite int NOT NULL, --gravite sur 3 niveaux, niveau 1: petit incident, niveau 2: incident avec blesses, niveau 3: incident sur plusieurs choses et des blesses graves
 	Foreign key(idSecteur) references Secteur(idSecteur),
 	PRIMARY KEY (incidentID, dateIncident, adresseIncident)
 	);
@@ -40,7 +40,7 @@ CREATE TABLE Incident (
 CREATE TABLE Equipement (
 	idEquipement int PRIMARY KEY IDENTITY(1,1),
 	typeEquipement nvarchar (50),
-	statutDisponibilité nvarchar (25) NOT NULL,
+	statutDisponibilite nvarchar (25) NOT NULL,
 	date_expiration date
 	);
 
@@ -68,7 +68,7 @@ CREATE TABLE Couvert(
 CREATE TABLE Equipe (
 	idEquipe int PRIMARY KEY,
 	nomEquipe nvarchar (30),
-	horaire nvarchar (30) CHECK (horaire in ('matin','après-midi','soir','nuit')),
+	horaire nvarchar (30) CHECK (horaire in ('matin','apres-midi','soir','nuit')),
 	idCaserne int,
 	FOREIGN KEY (idCaserne) REFERENCES Caserne(idCaserne) on delete cascade
 	);
@@ -79,7 +79,7 @@ CREATE TABLE RepartiteurUrgence (
 	prenom nvarchar (50) NOT NULL
 	);
 
-CREATE TABLE Rapporté (
+CREATE TABLE Rapporte (
 	incidentId int,
 	dateIncident date,
 	adresseIncident varchar (100),
