@@ -1,28 +1,27 @@
-/*CREATE DATABASE Gestion_Caserne;
-go*/
+CREATE DATABASE Gestion_Caserne;
+go
 Use Gestion_Caserne;
 GO
 
-DROP TABLE IF EXISTS Rapporte;
-DROP TABLE IF EXISTS Incident;
-DROP TABLE IF EXISTS RepartiteurUrgence;
-DROP TABLE IF EXISTS Couvert;
-DROP TABLE IF EXISTS equipementTeam;
-DROP TABLE IF EXISTS vehicule;
-DROP TABLE IF EXISTS equipementPerso;
-DROP TABLE IF EXISTS Pompier;
-DROP TABLE IF EXISTS Equipe;
-DROP TABLE IF EXISTS Caserne;
-DROP TABLE IF EXISTS Equipement;
-DROP TABLE IF EXISTS Incident;
-DROP TABLE IF EXISTS Secteur;
+DROP TABLE IF EXISTS Rapporte; -- Meryem
+DROP TABLE IF EXISTS RepartiteurUrgence; -- Mica
+DROP TABLE IF EXISTS Couvert; -- Salla
+DROP TABLE IF EXISTS equipementTeam; -- Gab
+DROP TABLE IF EXISTS vehicule; -- Meryem
+DROP TABLE IF EXISTS equipementPerso; -- Mica
+DROP TABLE IF EXISTS Pompier; -- Salla 
+DROP TABLE IF EXISTS Equipe; -- Gab
+DROP TABLE IF EXISTS Caserne; -- Meryem
+DROP TABLE IF EXISTS Equipement; -- Mica
+DROP TABLE IF EXISTS Incident; -- Salla
+DROP TABLE IF EXISTS Secteur; -- Gab
 
 --Creation des tables
 
 CREATE TABLE Secteur (
 	idSecteur int PRIMARY KEY,
 	codePostal char (7) CHECK (codePostal LIKE '[A-Z][0-9][A-Z] [0-9][A-Z][0-9]'),
-	nomSecteur nvarchar (50) NOT NULL,
+	nomSecteur nvarchar (50) NOT NULL, --Limite le char au texte
 	limitesGeographique text
 	);
 
@@ -49,15 +48,10 @@ CREATE TABLE Caserne (
 	nomCaserne nvarchar(100),
 	numeroTelephone varchar (12) NOT NULL CHECK (numeroTelephone LIKE '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'),
 	adresse varchar(100),
-	secteurCouvert1 int,
-	secteurCouvert2 int,
-	FOREIGN KEY (secteurCouvert1) references Secteur(idSecteur),
-	Foreign key (secteurCouvert2) references Secteur(idSecteur)
-	--ajout de secteur couvert pour avoir plus d'infos sur les casernes
 	);
 	
 
-CREATE TABLE Couvert(
+CREATE TABLE Couvert( --ajout de secteur couvert pour avoir plus d'infos sur les casernes
 	idSecteur int,
 	idCaserne int,
 	PRIMARY KEY (idSecteur, idCaserne),
@@ -83,14 +77,12 @@ CREATE TABLE Rapporte (
 	incidentId int,
 	dateIncident date,
 	adresseIncident varchar (100),
-	idsecteur int,
 	numEmploye int,
 	idCaserne int,
 	CaserneRenfort int,
 	PRIMARY KEY (incidentId, numEmploye, idCaserne),
 	FOREIGN KEY (incidentId, dateIncident, adresseIncident) REFERENCES Incident(incidentId, dateIncident, adresseIncident) on delete cascade,
 	FOREIGN KEY (numEmploye) REFERENCES RepartiteurUrgence(numEmploye) on delete cascade,
-	FOREIGN KEY (idsecteur) REFERENCES Secteur(idsecteur),
 	FOREIGN KEY (idCaserne) REFERENCES Caserne(idCaserne),
 	FOREIGN KEY (CaserneRenfort) References Caserne(idCaserne)
 	);
