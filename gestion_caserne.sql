@@ -19,7 +19,7 @@ DROP TABLE IF EXISTS Secteur; -- Gab
 --Creation des tables
 
 CREATE TABLE Secteur (
-	idSecteur INT IDENTITY PRIMARY KEY,
+	idSecteur int IDENTITY PRIMARY KEY,
 	codePostal char (7) CHECK (codePostal LIKE '[A-Z][0-9][A-Z] [0-9][A-Z][0-9]'),
 	nomSecteur nvarchar (50) NOT NULL, --Limite le char au texte
 	limitesGeographique text
@@ -60,7 +60,7 @@ CREATE TABLE Couvert( --ajout de secteur couvert pour avoir plus d'infos sur les
 	);
 	
 CREATE TABLE Equipe (
-	idEquipe int PRIMARY KEY,
+	idEquipe int IDENTITY PRIMARY KEY,
 	nomEquipe nvarchar (30),
 	horaire nvarchar (30) CHECK (horaire in ('matin','apres-midi','soir','nuit')),
 	idCaserne int,
@@ -132,4 +132,15 @@ INSERT INTO Secteur (codePostal, nomSecteur, limitesGeographique) VALUES
 ('J5A 1A7','Quartier Industriel', 'Rue S à Rue U'),
 ('J5A 1A8','Rosemont', 'Rue V à Rue Z');
 select * from Secteur;
+
+INSERT INTO Equipe (nomEquipe, horaire, idCaserne) VALUES 
+('Alpha','nuit', '1'), 
+('Delta','matin', '1'), 
+('Romeo','apres-midi', '1'),
+('Charlie','soir', '2'),
+('Bravo','nuit', '2'),
+('Echo','matin', '2'),
+('Zero','apres-midi', '3'),
+('Triolet','soir', '3');
+select * from Equipe;
 
