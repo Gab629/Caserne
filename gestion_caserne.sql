@@ -19,7 +19,7 @@ DROP TABLE IF EXISTS Secteur; -- Gab
 --Creation des tables
 
 CREATE TABLE Secteur (
-	idSecteur int PRIMARY KEY,
+	idSecteur INT IDENTITY PRIMARY KEY,
 	codePostal char (7) CHECK (codePostal LIKE '[A-Z][0-9][A-Z] [0-9][A-Z][0-9]'),
 	nomSecteur nvarchar (50) NOT NULL, --Limite le char au texte
 	limitesGeographique text
@@ -122,4 +122,14 @@ CREATE TABLE equipementPerso(
 	);
 
 --insertion de valeurs dans les tables
-select * from Equipe;
+INSERT INTO Secteur (codePostal, nomSecteur, limitesGeographique) VALUES 
+('J5A 1A1','Centre-Ville', 'Rue A à Rue C'), 
+('J5A 1A2','Quartier Nord', 'Rue D à Rue F'), 
+('J5A 1A3','Quartier Sud', 'Rue G à Rue I'),
+('J5A 1A4','Quartier Est', 'Rue J à Rue L'),
+('J5A 1A5','Quartier Ouest', 'Rue M à Rue O'),
+('J5A 1A6','Vieux Quartier', 'Rue P à Rue R'),
+('J5A 1A7','Quartier Industriel', 'Rue S à Rue U'),
+('J5A 1A8','Rosemont', 'Rue V à Rue Z');
+select * from Secteur;
+
