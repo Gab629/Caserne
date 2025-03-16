@@ -144,3 +144,13 @@ INSERT INTO Equipe (nomEquipe, horaire, idCaserne) VALUES
 ('Triolet','soir', '3');
 select * from Equipe;
 
+INSERT INTO equipementTeam (idEquipement, idEquipe) VALUES 
+('1','1'), 
+('2','1'), 
+('3','1'),
+('4','2'),
+('5','2'),
+('6','2'),
+('7','3'),
+('8','3');
+select * from equipementTeam;
