@@ -60,7 +60,7 @@ CREATE TABLE Couvert( --ajout de secteur couvert pour avoir plus d'infos sur les
 	);
 	
 CREATE TABLE Equipe (
-	idEquipe int IDENTITY PRIMARY KEY,
+	idEquipe int PRIMARY KEY,
 	nomEquipe nvarchar (30),
 	horaire nvarchar (30) CHECK (horaire in ('matin','apres-midi','soir','nuit')),
 	idCaserne int,
@@ -122,27 +122,31 @@ CREATE TABLE equipementPerso(
 	);
 
 --insertion de valeurs dans les tables
-INSERT INTO Secteur (codePostal, nomSecteur, limitesGeographique) 
-VALUES ('J5A 1A1','Centre-Ville', 'Rue A à Rue C'), 
-('J5A 1A2','Quartier Nord', 'Rue D à Rue F'), 
-('J5A 1A3','Quartier Sud', 'Rue G à Rue I'),
-('J5A 1A4','Quartier Est', 'Rue J à Rue L'),
-('J5A 1A5','Quartier Ouest', 'Rue M à Rue O'),
-('J5A 1A6','Vieux Quartier', 'Rue P à Rue R'),
-('J5A 1A7','Quartier Industriel', 'Rue S à Rue U'),
-('J5A 1A8','Rosemont', 'Rue V à Rue Z');
-select * from Secteur;
 
-INSERT INTO Equipe (nomEquipe, horaire, idCaserne) VALUES 
-('Alpha','nuit', '1'), 
-('Delta','matin', '1'), 
-('Romeo','apres-midi', '1'),
-('Charlie','soir', '2'),
-('Bravo','nuit', '2'),
-('Echo','matin', '2'),
-('Zero','apres-midi', '3'),
-('Triolet','soir', '3');
-select * from Equipe;
+-- table Rapporte
+INSERT INTO Rapporte (incidentId, dateIncident, adresseIncident, numEmploye, idCaserne, CaserneRenfort) VALUES 
+(1, '2025-03-15', '1000 Rue de la Gauchetière O, Montréal, QC', 1, 1, NULL),
+(2, '2025-03-16', '2000 Rue Saint-Denis, Montréal, QC', 2, 2, 1),
+(3, '2025-03-14', '3500 Rue de l''Université, Montréal, QC', 3, 3, NULL),
+(4, '2025-03-17', 'Parc du Mont-Royal, Montréal, QC', 4, 4, 2),
+(5, '2025-03-15', '500 Rue McGill, Montréal, QC', 5, 5, NULL),
+(6, '2025-03-17', '6000 Boulevard de l''Assomption, Montréal, QC', 6, 6, 3),
+(7, '2025-03-16', '2500 Rue Jarry E, Montréal, QC', 7, 7, NULL),
+(8, '2025-03-17', '1400 Boulevard de Maisonneuve O, Montréal, QC', 8, 8, 5);
+select * from Rapporte;
+
+-- table Repartiteur
+INSERT INTO RepartiteurUrgence(nom, prenom)
+VALUES  ('Senecal', 'Patrick'),
+		('Musso', 'Guillaume'),
+		('Quentin', 'Philippe'),
+		('De la Cruz', 'Pénéloppe'),
+		('Levac', 'Catherine'),
+		('Brown', 'Charlie'),
+		('Bercie', 'Audrey'),
+		('Cariere','Kassandra')
+;
+select * from RepartiteurUrgence;
 
 INSERT INTO equipementTeam (idEquipement, idEquipe) VALUES 
 ('1','1'), 
@@ -155,6 +159,59 @@ INSERT INTO equipementTeam (idEquipement, idEquipe) VALUES
 ('8','3');
 select * from equipementTeam;
 
+--  table Vehicule
+INSERT INTO Vehicule (idVehicule, typeVehicule, plaque_immatriculation, idEquipe) VALUES 
+(1, 'Camion-Pompe', 'A12 ABC', 2),
+(2, 'Échelle', 'B34 DEF', 3),
+(3, 'Unité de Secours', 'C56 GHI', 4),
+(4, 'Camion-Citerne', 'D78 JKL', 5),
+(5, 'Camion-Pompe', 'E90 MNO', 6),
+(6, 'Unité de Commandement', 'F12 PQR', 7),
+(7, 'Camion-Pompe', 'G34 STU', 8),
+(8, 'Échelle', 'H56 VWX', 8),
+(9, 'Camion-Citerne', 'I78 YZA', 2);
+select * from Vehicule;
+
+INSERT INTO equipementPerso(idEquipement, idEmploye)
+VALUES (11, 1),
+	   (12,5),
+	   (13,4),
+	   (14,8),
+	   (15,6),
+	   (16,7),
+	   (17,3),
+	   (18,2)
+;
+SELECT * FROM equipementPerso
+
+SET IDENTITY_INSERT Equipe ON;
+INSERT INTO Equipe (idEquipe ,nomEquipe, horaire, idCaserne) VALUES 
+(1 , 'Alpha','nuit', '1'), 
+(2, 'Delta','matin', '1'), 
+(3, 'Romeo','apres-midi', '1'),
+(4, 'Charlie','soir', '2'),
+(5, 'Bravo','nuit', '2'),
+(6, 'Echo','matin', '2'),
+(7, 'Zero','apres-midi', '3'),
+(8, 'Triolet','soir', '3');
+select * from Equipe;
+SET IDENTITY_INSERT Equipe OFF;
+
+--  table Caserne
+SET IDENTITY_INSERT Caserne ON;
+INSERT INTO Caserne (idCaserne, nomCaserne, numeroTelephone, adresse) VALUES 
+(1, 'Caserne Centrale', '514-123-4567', '123 Rue Centrale'),
+(2, 'Caserne Quartier Nord', '514-234-5678', '456 Rue Nord'),
+(3, 'Caserne Quartier Sud', '514-345-6789', '789 Rue Sud'),
+(4, 'Caserne Quartier Est', '514-456-7890', '101 Rue Est'),
+(5, 'Caserne Quartier Ouest', '514-567-8901', '202 Rue Ouest'),
+(6, 'Caserne Vieux Quartier', '514-678-9012', '303 Rue Vieux'),
+(7, 'Caserne Industrielle', '514-789-0123', '404 Rue Industrie'),
+(8, 'Caserne Rosemont', '514-890-1234', '505 Rue Rosemont');
+select * from Caserne;
+SET IDENTITY_INSERT Caserne OFF;
+
+SET IDENTITY_INSERT Equipement ON;
 INSERT INTO Equipement(idEquipement, typeEquipement, statutDisponibilite, date_expiration) 
 VALUES  (1,'Equipe', 'Disponible','2027-10-31'),
 	    (2,'Equipe', 'Disponible','2027-10-31'),
@@ -174,31 +231,68 @@ VALUES  (1,'Equipe', 'Disponible','2027-10-31'),
 		(18,'Personnel', 'En utilisation','2027-12-31')
 ;
 select * from Equipement;
+SET IDENTITY_INSERT Equipement OFF;
 
---insertion de valeurs pour Pompier
 
-INSERT INTO equipementPerso(idEquipement, idEmploye)
-VALUES (11, 1),
-	   (12,5),
-	   (13,4),
-	   (14,8),
-	   (15,6),
-	   (16,7),
-	   (17,3),
-	   (18,2)
-;
-SELECT * FROM equipementPerso
 
-INSERT INTO RepartiteurUrgence(nom, prenom)
-VALUES  ('Senecal', 'Patrick'),
-		('Musso', 'Guillaume'),
-		('Quentin', 'Philippe'),
-		('De la Cruz', 'Pénéloppe'),
-		('Levac', 'Catherine'),
-		('Brown', 'Charlie'),
-		('Bercie', 'Audrey'),
-		('Cariere','Kassandra')
-;
-select * from RepartiteurUrgence;
+INSERT INTO Secteur (codePostal, nomSecteur, limitesGeographique) 
+VALUES ('J5A 1A1','Centre-Ville', 'Rue A à Rue C'), 
+('J5A 1A2','Quartier Nord', 'Rue D à Rue F'), 
+('J5A 1A3','Quartier Sud', 'Rue G à Rue I'),
+('J5A 1A4','Quartier Est', 'Rue J à Rue L'),
+('J5A 1A5','Quartier Ouest', 'Rue M à Rue O'),
+('J5A 1A6','Vieux Quartier', 'Rue P à Rue R'),
+('J5A 1A7','Quartier Industriel', 'Rue S à Rue U'),
+('J5A 1A8','Rosemont', 'Rue V à Rue Z');
+select * from Secteur;
+
+SET IDENTITY_INSERT Pompier ON;
+INSERT INTO Pompier (idEmploye, nom, prenom, numTel, poste, idEquipe)
+VALUES 
+(1, 'Dupont', 'Jean', '061-234-5678', 'Chef de Corps', 1),
+(2, 'Leclerc', 'Marie', '062-345-6789', 'Officier de garde', 2),
+(3, 'Martin', 'Pierre', '063-456-7890', 'Sapeur-Pompier', 3),
+(4, 'Moreau', 'Sophie', '064-567-8901', 'Sapeur-Pompier', 4),
+(5, 'Lemoine', 'Alexandre', '065-678-9012', 'Sapeur-Pompier', 5),
+(6, 'Bernard', 'Claire', '066-789-0123', 'Chef de garde', 6),
+(7, 'Garnier', 'David', '067-890-1234', 'Sapeur-Pompier', 7),
+(8, 'Robert', 'Chloé', '068-901-2345', 'Officier de garde', 8);
+select * from Pompier;
+SET IDENTITY_INSERT Pompier OFF;
+
+SET IDENTITY_INSERT Incident ON;
+INSERT INTO Incident (incidentID, typeIncident, dateIncident, gravite, adresseIncident, idSecteur)
+VALUES 
+(1, 'Incendie', '2025-03-15', 3, '500 Rue Saint-Antoine O, Montréal, QC', 3),
+(2, 'Accident de la route', '2025-03-16', 2, 'Avenue du Parc, Montréal, QC', 5),
+(3, 'Inondation', '2025-03-17', 1, '1500 Boulevard de Maisonneuve O, Montréal, QC', 2),
+(4, 'Feu de forêt', '2025-03-18', 3, 'Parc du Mont-Royal, Montréal, QC', 7),
+(5, 'Gaz toxique', '2025-03-19', 1, '30 Rue Saint-Denis, Montréal, QC', 4),
+(6, 'Accident industriel', '2025-03-20', 2, 'Rue Jean-Talon O, Montréal, QC', 6),
+(7, 'Feu', '2025-03-21', 2, 'Rue Saint-Laurent, Montréal, QC', 1),
+(8, 'Explosion', '2025-03-22', 1, '1500 Boulevard René-Lévesque O, Montréal, QC', 8);
+select * from Incident;
+SET IDENTITY_INSERT Incident OFF;
+
+INSERT INTO Couvert (idSecteur, idCaserne)
+VALUES 
+(1, 1),
+(2, 1),
+(3, 2),
+(4, 3),
+(5, 4),
+(6, 4),
+(7, 5),
+(8, 6),
+(1, 7),
+(3, 8);
+select * from Couvert;
+
+
+
+
+
+
+
 
 
