@@ -1,5 +1,5 @@
-CREATE DATABASE Gestion_Caserne;
-go
+/*CREATE DATABASE Gestion_Caserne;
+go*/
 Use Gestion_Caserne;
 GO
 
@@ -37,9 +37,9 @@ CREATE TABLE Incident (
 	);
 
 CREATE TABLE Equipement (
-	idEquipement int PRIMARY KEY IDENTITY(1,1),
-	typeEquipement nvarchar (50),
-	statutDisponibilite nvarchar (25) NOT NULL,
+	idEquipement int PRIMARY KEY,
+	typeEquipement nvarchar(50),
+	statutDisponibilite nvarchar(50) NOT NULL,
 	date_expiration date
 	);
 
@@ -122,8 +122,8 @@ CREATE TABLE equipementPerso(
 	);
 
 --insertion de valeurs dans les tables
-INSERT INTO Secteur (codePostal, nomSecteur, limitesGeographique) VALUES 
-('J5A 1A1','Centre-Ville', 'Rue A à Rue C'), 
+INSERT INTO Secteur (codePostal, nomSecteur, limitesGeographique) 
+VALUES ('J5A 1A1','Centre-Ville', 'Rue A à Rue C'), 
 ('J5A 1A2','Quartier Nord', 'Rue D à Rue F'), 
 ('J5A 1A3','Quartier Sud', 'Rue G à Rue I'),
 ('J5A 1A4','Quartier Est', 'Rue J à Rue L'),
@@ -154,3 +154,51 @@ INSERT INTO equipementTeam (idEquipement, idEquipe) VALUES
 ('7','3'),
 ('8','3');
 select * from equipementTeam;
+
+INSERT INTO Equipement(idEquipement, typeEquipement, statutDisponibilite, date_expiration) 
+VALUES  (1,'Equipe', 'Disponible','2027-10-31'),
+	    (2,'Equipe', 'Disponible','2027-10-31'),
+		(3,'Equipe', 'Indisponible','2027-12-31'),
+		(4,'Equipe', 'Disponible','2030-10-31'),
+		(5,'Equipe', 'En réparation','2027-10-31'),
+		(6,'Equipe', 'En utilisation','2025-10-31'),
+		(7,'Equipe', 'A renouveler','2025-04-01'),
+		(8,'Equipe', 'Disponible','2027-07-31'),
+		(11,'Personnel', 'Disponible','2035-10-31'),
+		(12,'Personnel', 'Disponible','2028-08-31'),
+		(13,'Personnel', 'A nettoyer','2027-10-31'),
+		(14,'Personnel', 'Indisponible','2027-02-28'),
+		(15,'Personnel', 'Indisponible','2025-11-30'),
+		(16,'Personnel', 'En utilisation','2027-12-31'),
+		(17,'Personnel', 'En utilisation','2027-12-31'),
+		(18,'Personnel', 'En utilisation','2027-12-31')
+;
+select * from Equipement;
+
+--insertion de valeurs pour Pompier
+
+INSERT INTO equipementPerso(idEquipement, idEmploye)
+VALUES (11, 1),
+	   (12,5),
+	   (13,4),
+	   (14,8),
+	   (15,6),
+	   (16,7),
+	   (17,3),
+	   (18,2)
+;
+SELECT * FROM equipementPerso
+
+INSERT INTO RepartiteurUrgence(nom, prenom)
+VALUES  ('Senecal', 'Patrick'),
+		('Musso', 'Guillaume'),
+		('Quentin', 'Philippe'),
+		('De la Cruz', 'Pénéloppe'),
+		('Levac', 'Catherine'),
+		('Brown', 'Charlie'),
+		('Bercie', 'Audrey'),
+		('Cariere','Kassandra')
+;
+select * from RepartiteurUrgence;
+
+
