@@ -124,15 +124,16 @@ CREATE TABLE equipementPerso(
 --insertion de valeurs dans les tables
 
 -- table Rapporte
+DELETE FROM Rapporte;
 INSERT INTO Rapporte (incidentId, dateIncident, adresseIncident, numEmploye, idCaserne, CaserneRenfort) VALUES 
-(1, '2025-03-15', '1000 Rue de la Gauchetière O, Montréal, QC', 1, 1, NULL),
-(2, '2025-03-16', '2000 Rue Saint-Denis, Montréal, QC', 2, 2, 1),
-(3, '2025-03-14', '3500 Rue de l''Université, Montréal, QC', 3, 3, NULL),
-(4, '2025-03-17', 'Parc du Mont-Royal, Montréal, QC', 4, 4, 2),
-(5, '2025-03-15', '500 Rue McGill, Montréal, QC', 5, 5, NULL),
-(6, '2025-03-17', '6000 Boulevard de l''Assomption, Montréal, QC', 6, 6, 3),
-(7, '2025-03-16', '2500 Rue Jarry E, Montréal, QC', 7, 7, NULL),
-(8, '2025-03-17', '1400 Boulevard de Maisonneuve O, Montréal, QC', 8, 8, 5);
+(1, '2025-03-15', '500 Rue Saint-Antoine O, Montréal, QC', 1, 1, NULL),
+(2, '2025-03-16', 'Avenue du Parc, Montréal, QC', 2, 2, 1),
+(3, '2025-03-17', '1500 Boulevard de Maisonneuve O, Montréal, QC', 3, 3, NULL),
+(4, '2025-03-18', 'Parc du Mont-Royal, Montréal, QC', 4, 4, 2),
+(5, '2025-03-19', '30 Rue Saint-Denis, Montréal, QC', 5, 5, NULL),
+(6, '2025-03-20', 'Rue Jean-Talon O, Montréal, QC', 6, 6, 3),
+(7, '2025-03-21', 'Rue Saint-Laurent, Montréal, QC', 7, 7, NULL),
+(8, '2025-03-22', '1500 Boulevard René-Lévesque O, Montréal, QC', 8, 8, 5);
 select * from Rapporte;
 
 -- table Repartiteur
