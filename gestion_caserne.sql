@@ -326,3 +326,38 @@ FROM Incident
 JOIN Secteur ON Incident.idSecteur = Secteur.idSecteur
 JOIN Couvert ON Secteur.idSecteur = Couvert.idSecteur
 JOIN Caserne ON Couvert.idCaserne = Couvert.idCaserne;
+
+
+--Lister les casernes ayant au moins un incident de niveau 3 (sous-requete avce ANY)
+SELECT nomCaserne
+FROM Caserne
+WHERE idCaserne = ANY (
+    SELECT idCaserne
+    FROM Rapporte
+    JOIN Incident ON Rapporte.incidentId = Incident.incidentID
+    WHERE gravite = 3
+);
+
+--Lister les secteurs n’ayant jamais eu d’incidents grave (sous-requete avec IN)
+SELECT nomSecteur
+FROM Secteur
+WHERE idSecteur NOT IN (
+    SELECT idSecteur
+    FROM Incident
+    WHERE gravite = 3
+);
+
+--Lister les chefs de garde qui ont effectué des interventions avec des véhicules de type "Camion-Pompe" 
+SELECT Pompier.nom, Pompier.prenom, Pompier.poste, Vehicule.typeVehicule, Incident.incidentID, Incident.typeIncident, Incident.dateIncident
+FROM Pompier
+JOIN Equipe ON Pompier.idEquipe = Equipe.idEquipe
+JOIN Vehicule ON Vehicule.idEquipe = Equipe.idEquipe
+JOIN Caserne ON Equipe.idCaserne = Caserne.idCaserne
+JOIN Couvert ON Caserne.idCaserne = Couvert.idCaserne
+JOIN Incident ON Incident.idSecteur = Couvert.idSecteur
+WHERE Pompier.poste = 'Chef de garde'
+  AND Vehicule.typeVehicule = 'Camion-Pompe';
+
+
+
+
