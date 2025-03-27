@@ -321,8 +321,14 @@ JOIN Equipe ON Pompier.idEquipe = Equipe.idEquipe
 WHERE Equipe.nomEquipe = 'Triolet';
 
 --Liste des incidents avec leur secteur et la caserne qui les couvre
-SELECT Incident.incidentID,Incident.typeIncident, Secteur.nomSecteur, Caserne.nomCaserne
+SELECT Incident.incidentID, Incident.typeIncident, Secteur.nomSecteur, Caserne.nomCaserne
 FROM Incident 
 JOIN Secteur ON Incident.idSecteur = Secteur.idSecteur
 JOIN Couvert ON Secteur.idSecteur = Couvert.idSecteur
 JOIN Caserne ON Couvert.idCaserne = Couvert.idCaserne;
+
+--Trouver les pompiers avec leur équipement personnel
+SELECT Pompier.nom, Pompier.prenom, Equipement.typeEquipement
+FROM Pompier
+JOIN equipementPerso ON Pompier.idEmploye = equipementPerso.idEmploye
+JOIN Equipement ON equipementPerso.idEquipement = Equipement.idEquipement;
