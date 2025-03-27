@@ -313,3 +313,16 @@ WHERE Rapporte.CaserneRenfort IS NOT NULL;
 --Afficher les incidents survenus après le 15 mars 2025
 SELECT * FROM Incident
 WHERE dateIncident > '2025-03-18';
+
+--Liste des pompiers d'une équipe spécifique
+SELECT Pompier.nom, Pompier.prenom, Pompier.poste
+FROM Pompier 
+JOIN Equipe ON Pompier.idEquipe = Equipe.idEquipe
+WHERE Equipe.nomEquipe = 'Triolet';
+
+--Liste des incidents avec leur secteur et la caserne qui les couvre
+SELECT Incident.incidentID,Incident.typeIncident, Secteur.nomSecteur, Caserne.nomCaserne
+FROM Incident 
+JOIN Secteur ON Incident.idSecteur = Secteur.idSecteur
+JOIN Couvert ON Secteur.idSecteur = Couvert.idSecteur
+JOIN Caserne ON Couvert.idCaserne = Couvert.idCaserne;
