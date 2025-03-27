@@ -169,7 +169,7 @@ VALUES  (1,'Equipe', 'Disponible','2027-10-31'),
 ;
 select * from Equipement;
 
-SET IDENTITY_INSERT Caserne ON;
+
 INSERT INTO Caserne (idCaserne, nomCaserne, numeroTelephone, adresse) VALUES 
 (1, 'Caserne Centrale', '514-123-4567', '123 Rue Centrale'),
 (2, 'Caserne Quartier Nord', '514-234-5678', '456 Rue Nord'),
@@ -180,9 +180,8 @@ INSERT INTO Caserne (idCaserne, nomCaserne, numeroTelephone, adresse) VALUES
 (7, 'Caserne Industrielle', '514-789-0123', '404 Rue Industrie'),
 (8, 'Caserne Rosemont', '514-890-1234', '505 Rue Rosemont');
 select * from Caserne;
-SET IDENTITY_INSERT Caserne OFF;
 
-SET IDENTITY_INSERT Equipe ON;
+
 INSERT INTO Equipe (idEquipe ,nomEquipe, horaire, idCaserne) VALUES 
 (1 , 'Alpha','nuit', '1'), 
 (2, 'Delta','matin', '1'), 
@@ -193,7 +192,7 @@ INSERT INTO Equipe (idEquipe ,nomEquipe, horaire, idCaserne) VALUES
 (7, 'Zero','apres-midi', '3'),
 (8, 'Triolet','soir', '3');
 select * from Equipe;
-SET IDENTITY_INSERT Equipe OFF;
+
 
 
 SET IDENTITY_INSERT Pompier ON;
@@ -284,22 +283,33 @@ INSERT INTO Rapporte (incidentId, dateIncident, adresseIncident, numEmploye, idC
 select * from Rapporte;
 
 
+--Lister les noms et prenoms des pompiers avec leur équipe, caserne et le secteur couvert par leur caserne
+
+Select Pompier.nom, Pompier.prenom, Equipe.nomEquipe, Caserne.nomCaserne, Secteur.nomSecteur
+FROM Pompier, Caserne, Equipe, Secteur, Couvert
+WHERE Pompier.idEquipe = Equipe.idEquipe
+AND Equipe.idCaserne = Caserne.idCaserne
+AND Caserne.idCaserne = Couvert.idCaserne
+AND Couvert.idSecteur = Secteur.idSecteur;
+
+--Trouver les véhicules associés à chaque caserne et équipe Afficher le nom de la caserne, le nom de l’équipe et le type de véhicule.
+
+SELECT Vehicule.typeVehicule, Caserne.nomCaserne, Equipe.nomEquipe
+FROM Caserne, Equipe, Vehicule
+WHERE Equipe.idCaserne = Caserne.idCaserne
+AND Vehicule.idEquipe = Equipe.idEquipe;
+
+--Lister les incidents où une caserne de renfort a été appelée, avec les répartiteurs responsables
+
+SELECT Incident.typeIncident, caserne1.nomCaserne, caserne2.nomCaserne, RepartiteurUrgence.nom
+FROM Rapporte
+JOIN Incident ON Rapporte.incidentId = Incident.incidentId
+JOIN Caserne caserne1 ON Rapporte.idCaserne = caserne1.idCaserne
+JOIN Caserne caserne2 ON Rapporte.CaserneRenfort = caserne2.idCaserne
+JOIN RepartiteurUrgence ON Rapporte.numEmploye = RepartiteurUrgence.numEmploye
+WHERE Rapporte.CaserneRenfort IS NOT NULL;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+--Afficher les incidents survenus après le 15 mars 2025
+SELECT * FROM Incident
+WHERE dateIncident > '2025-03-18';
