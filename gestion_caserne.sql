@@ -3,18 +3,18 @@ go*/
 Use Gestion_Caserne;
 GO
 
-DROP TABLE IF EXISTS Rapporte; -- Meryem
-DROP TABLE IF EXISTS RepartiteurUrgence; -- Mica
-DROP TABLE IF EXISTS Couvert; -- Salla
-DROP TABLE IF EXISTS equipementTeam; -- Gab
-DROP TABLE IF EXISTS vehicule; -- Meryem
-DROP TABLE IF EXISTS equipementPerso; -- Mica
-DROP TABLE IF EXISTS Pompier; -- Salla 
-DROP TABLE IF EXISTS Equipe; -- Gab
-DROP TABLE IF EXISTS Caserne; -- Meryem
-DROP TABLE IF EXISTS Equipement; -- Mica
-DROP TABLE IF EXISTS Incident; -- Salla
-DROP TABLE IF EXISTS Secteur; -- Gab
+DROP TABLE IF EXISTS Rapporte; 
+DROP TABLE IF EXISTS RepartiteurUrgence; 
+DROP TABLE IF EXISTS Couvert; 
+DROP TABLE IF EXISTS equipementTeam; 
+DROP TABLE IF EXISTS vehicule; 
+DROP TABLE IF EXISTS equipementPerso; 
+DROP TABLE IF EXISTS Pompier; 
+DROP TABLE IF EXISTS Equipe; 
+DROP TABLE IF EXISTS Caserne; 
+DROP TABLE IF EXISTS Equipement; 
+DROP TABLE IF EXISTS Incident; 
+DROP TABLE IF EXISTS Secteur; 
 
 --Creation des tables
 
@@ -123,96 +123,32 @@ CREATE TABLE equipementPerso(
 
 --insertion de valeurs dans les tables
 
--- table Rapporte
-DELETE FROM Rapporte;
-INSERT INTO Rapporte (incidentId, dateIncident, adresseIncident, numEmploye, idCaserne, CaserneRenfort) VALUES 
-(1, '2025-03-15', '500 Rue Saint-Antoine O, Montréal, QC', 1, 1, NULL),
-(2, '2025-03-16', 'Avenue du Parc, Montréal, QC', 2, 2, 1),
-(3, '2025-03-17', '1500 Boulevard de Maisonneuve O, Montréal, QC', 3, 3, NULL),
-(4, '2025-03-18', 'Parc du Mont-Royal, Montréal, QC', 4, 4, 2),
-(5, '2025-03-19', '30 Rue Saint-Denis, Montréal, QC', 5, 5, NULL),
-(6, '2025-03-20', 'Rue Jean-Talon O, Montréal, QC', 6, 6, 3),
-(7, '2025-03-21', 'Rue Saint-Laurent, Montréal, QC', 7, 7, NULL),
-(8, '2025-03-22', '1500 Boulevard René-Lévesque O, Montréal, QC', 8, 8, 5);
-select * from Rapporte;
+INSERT INTO Secteur (codePostal, nomSecteur, limitesGeographique) 
+VALUES ('J5A 1A1','Centre-Ville', 'Rue A à Rue C'), 
+('J5A 1A2','Quartier Nord', 'Rue D à Rue F'), 
+('J5A 1A3','Quartier Sud', 'Rue G à Rue I'),
+('J5A 1A4','Quartier Est', 'Rue J à Rue L'),
+('J5A 1A5','Quartier Ouest', 'Rue M à Rue O'),
+('J5A 1A6','Vieux Quartier', 'Rue P à Rue R'),
+('J5A 1A7','Quartier Industriel', 'Rue S à Rue U'),
+('J5A 1A8','Rosemont', 'Rue V à Rue Z');
+select * from Secteur;
 
--- table Repartiteur
-INSERT INTO RepartiteurUrgence(nom, prenom)
-VALUES  ('Senecal', 'Patrick'),
-		('Musso', 'Guillaume'),
-		('Quentin', 'Philippe'),
-		('De la Cruz', 'Pénéloppe'),
-		('Levac', 'Catherine'),
-		('Brown', 'Charlie'),
-		('Bercie', 'Audrey'),
-		('Cariere','Kassandra')
-;
-select * from RepartiteurUrgence;
+SET IDENTITY_INSERT Incident ON;
+INSERT INTO Incident (incidentID, typeIncident, dateIncident, gravite, adresseIncident, idSecteur)
+VALUES 
+(1, 'Incendie', '2025-03-15', 3, '500 Rue Saint-Antoine O, Montréal, QC', 3),
+(2, 'Accident de la route', '2025-03-16', 2, 'Avenue du Parc, Montréal, QC', 5),
+(3, 'Inondation', '2025-03-17', 1, '1500 Boulevard de Maisonneuve O, Montréal, QC', 2),
+(4, 'Feu de forêt', '2025-03-18', 3, 'Parc du Mont-Royal, Montréal, QC', 7),
+(5, 'Gaz toxique', '2025-03-19', 1, '30 Rue Saint-Denis, Montréal, QC', 4),
+(6, 'Accident industriel', '2025-03-20', 2, 'Rue Jean-Talon O, Montréal, QC', 6),
+(7, 'Feu', '2025-03-21', 2, 'Rue Saint-Laurent, Montréal, QC', 1),
+(8, 'Explosion', '2025-03-22', 1, '1500 Boulevard René-Lévesque O, Montréal, QC', 8);
+select * from Incident;
+SET IDENTITY_INSERT Incident OFF;
 
-INSERT INTO equipementTeam (idEquipement, idEquipe) VALUES 
-('1','1'), 
-('2','1'), 
-('3','1'),
-('4','2'),
-('5','2'),
-('6','2'),
-('7','3'),
-('8','3');
-select * from equipementTeam;
 
---  table Vehicule
-INSERT INTO Vehicule (idVehicule, typeVehicule, plaque_immatriculation, idEquipe) VALUES 
-(1, 'Camion-Pompe', 'A12 ABC', 2),
-(2, 'Échelle', 'B34 DEF', 3),
-(3, 'Unité de Secours', 'C56 GHI', 4),
-(4, 'Camion-Citerne', 'D78 JKL', 5),
-(5, 'Camion-Pompe', 'E90 MNO', 6),
-(6, 'Unité de Commandement', 'F12 PQR', 7),
-(7, 'Camion-Pompe', 'G34 STU', 8),
-(8, 'Échelle', 'H56 VWX', 8),
-(9, 'Camion-Citerne', 'I78 YZA', 2);
-select * from Vehicule;
-
-INSERT INTO equipementPerso(idEquipement, idEmploye)
-VALUES (11, 1),
-	   (12,5),
-	   (13,4),
-	   (14,8),
-	   (15,6),
-	   (16,7),
-	   (17,3),
-	   (18,2)
-;
-SELECT * FROM equipementPerso
-
-SET IDENTITY_INSERT Equipe ON;
-INSERT INTO Equipe (idEquipe ,nomEquipe, horaire, idCaserne) VALUES 
-(1 , 'Alpha','nuit', '1'), 
-(2, 'Delta','matin', '1'), 
-(3, 'Romeo','apres-midi', '1'),
-(4, 'Charlie','soir', '2'),
-(5, 'Bravo','nuit', '2'),
-(6, 'Echo','matin', '2'),
-(7, 'Zero','apres-midi', '3'),
-(8, 'Triolet','soir', '3');
-select * from Equipe;
-SET IDENTITY_INSERT Equipe OFF;
-
---  table Caserne
-SET IDENTITY_INSERT Caserne ON;
-INSERT INTO Caserne (idCaserne, nomCaserne, numeroTelephone, adresse) VALUES 
-(1, 'Caserne Centrale', '514-123-4567', '123 Rue Centrale'),
-(2, 'Caserne Quartier Nord', '514-234-5678', '456 Rue Nord'),
-(3, 'Caserne Quartier Sud', '514-345-6789', '789 Rue Sud'),
-(4, 'Caserne Quartier Est', '514-456-7890', '101 Rue Est'),
-(5, 'Caserne Quartier Ouest', '514-567-8901', '202 Rue Ouest'),
-(6, 'Caserne Vieux Quartier', '514-678-9012', '303 Rue Vieux'),
-(7, 'Caserne Industrielle', '514-789-0123', '404 Rue Industrie'),
-(8, 'Caserne Rosemont', '514-890-1234', '505 Rue Rosemont');
-select * from Caserne;
-SET IDENTITY_INSERT Caserne OFF;
-
-SET IDENTITY_INSERT Equipement ON;
 INSERT INTO Equipement(idEquipement, typeEquipement, statutDisponibilite, date_expiration) 
 VALUES  (1,'Equipe', 'Disponible','2027-10-31'),
 	    (2,'Equipe', 'Disponible','2027-10-31'),
@@ -232,20 +168,33 @@ VALUES  (1,'Equipe', 'Disponible','2027-10-31'),
 		(18,'Personnel', 'En utilisation','2027-12-31')
 ;
 select * from Equipement;
-SET IDENTITY_INSERT Equipement OFF;
 
+SET IDENTITY_INSERT Caserne ON;
+INSERT INTO Caserne (idCaserne, nomCaserne, numeroTelephone, adresse) VALUES 
+(1, 'Caserne Centrale', '514-123-4567', '123 Rue Centrale'),
+(2, 'Caserne Quartier Nord', '514-234-5678', '456 Rue Nord'),
+(3, 'Caserne Quartier Sud', '514-345-6789', '789 Rue Sud'),
+(4, 'Caserne Quartier Est', '514-456-7890', '101 Rue Est'),
+(5, 'Caserne Quartier Ouest', '514-567-8901', '202 Rue Ouest'),
+(6, 'Caserne Vieux Quartier', '514-678-9012', '303 Rue Vieux'),
+(7, 'Caserne Industrielle', '514-789-0123', '404 Rue Industrie'),
+(8, 'Caserne Rosemont', '514-890-1234', '505 Rue Rosemont');
+select * from Caserne;
+SET IDENTITY_INSERT Caserne OFF;
 
+SET IDENTITY_INSERT Equipe ON;
+INSERT INTO Equipe (idEquipe ,nomEquipe, horaire, idCaserne) VALUES 
+(1 , 'Alpha','nuit', '1'), 
+(2, 'Delta','matin', '1'), 
+(3, 'Romeo','apres-midi', '1'),
+(4, 'Charlie','soir', '2'),
+(5, 'Bravo','nuit', '2'),
+(6, 'Echo','matin', '2'),
+(7, 'Zero','apres-midi', '3'),
+(8, 'Triolet','soir', '3');
+select * from Equipe;
+SET IDENTITY_INSERT Equipe OFF;
 
-INSERT INTO Secteur (codePostal, nomSecteur, limitesGeographique) 
-VALUES ('J5A 1A1','Centre-Ville', 'Rue A à Rue C'), 
-('J5A 1A2','Quartier Nord', 'Rue D à Rue F'), 
-('J5A 1A3','Quartier Sud', 'Rue G à Rue I'),
-('J5A 1A4','Quartier Est', 'Rue J à Rue L'),
-('J5A 1A5','Quartier Ouest', 'Rue M à Rue O'),
-('J5A 1A6','Vieux Quartier', 'Rue P à Rue R'),
-('J5A 1A7','Quartier Industriel', 'Rue S à Rue U'),
-('J5A 1A8','Rosemont', 'Rue V à Rue Z');
-select * from Secteur;
 
 SET IDENTITY_INSERT Pompier ON;
 INSERT INTO Pompier (idEmploye, nom, prenom, numTel, poste, idEquipe)
@@ -261,19 +210,40 @@ VALUES
 select * from Pompier;
 SET IDENTITY_INSERT Pompier OFF;
 
-SET IDENTITY_INSERT Incident ON;
-INSERT INTO Incident (incidentID, typeIncident, dateIncident, gravite, adresseIncident, idSecteur)
-VALUES 
-(1, 'Incendie', '2025-03-15', 3, '500 Rue Saint-Antoine O, Montréal, QC', 3),
-(2, 'Accident de la route', '2025-03-16', 2, 'Avenue du Parc, Montréal, QC', 5),
-(3, 'Inondation', '2025-03-17', 1, '1500 Boulevard de Maisonneuve O, Montréal, QC', 2),
-(4, 'Feu de forêt', '2025-03-18', 3, 'Parc du Mont-Royal, Montréal, QC', 7),
-(5, 'Gaz toxique', '2025-03-19', 1, '30 Rue Saint-Denis, Montréal, QC', 4),
-(6, 'Accident industriel', '2025-03-20', 2, 'Rue Jean-Talon O, Montréal, QC', 6),
-(7, 'Feu', '2025-03-21', 2, 'Rue Saint-Laurent, Montréal, QC', 1),
-(8, 'Explosion', '2025-03-22', 1, '1500 Boulevard René-Lévesque O, Montréal, QC', 8);
-select * from Incident;
-SET IDENTITY_INSERT Incident OFF;
+INSERT INTO equipementPerso(idEquipement, idEmploye)
+VALUES (11, 1),
+	   (12,5),
+	   (13,4),
+	   (14,8),
+	   (15,6),
+	   (16,7),
+	   (17,3),
+	   (18,2)
+;
+SELECT * FROM equipementPerso
+
+INSERT INTO Vehicule (idVehicule, typeVehicule, plaque_immatriculation, idEquipe) VALUES 
+(1, 'Camion-Pompe', 'A12 ABC', 2),
+(2, 'Échelle', 'B34 DEF', 3),
+(3, 'Unité de Secours', 'C56 GHI', 4),
+(4, 'Camion-Citerne', 'D78 JKL', 5),
+(5, 'Camion-Pompe', 'E90 MNO', 6),
+(6, 'Unité de Commandement', 'F12 PQR', 7),
+(7, 'Camion-Pompe', 'G34 STU', 8),
+(8, 'Échelle', 'H56 VWX', 8),
+(9, 'Camion-Citerne', 'I78 YZA', 2);
+select * from Vehicule;
+
+INSERT INTO equipementTeam (idEquipement, idEquipe) VALUES 
+('1','1'), 
+('2','1'), 
+('3','1'),
+('4','2'),
+('5','2'),
+('6','2'),
+('7','3'),
+('8','3');
+select * from equipementTeam;
 
 INSERT INTO Couvert (idSecteur, idCaserne)
 VALUES 
@@ -288,6 +258,42 @@ VALUES
 (1, 7),
 (3, 8);
 select * from Couvert;
+
+
+INSERT INTO RepartiteurUrgence(nom, prenom)
+VALUES  ('Senecal', 'Patrick'),
+		('Musso', 'Guillaume'),
+		('Quentin', 'Philippe'),
+		('De la Cruz', 'Pénéloppe'),
+		('Levac', 'Catherine'),
+		('Brown', 'Charlie'),
+		('Bercie', 'Audrey'),
+		('Cariere','Kassandra');
+select * from RepartiteurUrgence;
+
+
+INSERT INTO Rapporte (incidentId, dateIncident, adresseIncident, numEmploye, idCaserne, CaserneRenfort) VALUES 
+(1, '2025-03-15', '500 Rue Saint-Antoine O, Montréal, QC', 1, 1, NULL),
+(2, '2025-03-16', 'Avenue du Parc, Montréal, QC', 2, 2, 1),
+(3, '2025-03-17', '1500 Boulevard de Maisonneuve O, Montréal, QC', 3, 3, NULL),
+(4, '2025-03-18', 'Parc du Mont-Royal, Montréal, QC', 4, 4, 2),
+(5, '2025-03-19', '30 Rue Saint-Denis, Montréal, QC', 5, 5, NULL),
+(6, '2025-03-20', 'Rue Jean-Talon O, Montréal, QC', 6, 6, 3),
+(7, '2025-03-21', 'Rue Saint-Laurent, Montréal, QC', 7, 7, NULL),
+(8, '2025-03-22', '1500 Boulevard René-Lévesque O, Montréal, QC', 8, 8, 5);
+select * from Rapporte;
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
