@@ -293,7 +293,6 @@ AND Caserne.idCaserne = Couvert.idCaserne
 AND Couvert.idSecteur = Secteur.idSecteur;
 
 
-SELECT * FROM Vehicule;
 --Trouver les véhicules associés à chaque caserne et équipe avec le nom d'un pompier. Afficher le nom de la caserne, le nom de l’équipe, le type de véhicule ainsi que le nom prénom d'un pompier.
 
 SELECT Vehicule.typeVehicule, Caserne.nomCaserne, Equipe.nomEquipe, Pompier.nom, Pompier.prenom
@@ -362,7 +361,13 @@ JOIN Incident ON Incident.idSecteur = Couvert.idSecteur
 WHERE Pompier.poste = 'Chef de garde'
 AND Vehicule.typeVehicule = 'Camion-Pompe';
 
-
-
+--Afficher le nom et prénom des pompiers ainsi que leur équipe dont l’équipement personnel est indisponible, est expiré ou est a nettoyer
+SELECT Pompier.nom, Pompier.prenom, Equipe.idEquipe, Equipement.idEquipement, Equipement.statutDisponibilite
+from equipementPerso
+join Equipement on Equipement.idEquipement = equipementPerso.idEquipement
+join Pompier on equipementPerso.idEmploye = Pompier.idEmploye
+join Equipe ON Pompier.idEquipe = Equipe.idEquipe
+where Equipement.statutDisponibilite IN ('Indisponible', 'A renouveler', 'A nettoyer') 
+AND Equipement.typeEquipement = 'Personnel';
 
 
