@@ -408,7 +408,8 @@ GO
 SELECT dbo.compterIncidentsSecteur(6) AS VieuxQuartier;
 
 
--- declancheur : mise a jour automatique du statut d’un equipement expire lors d’un UPDATE 
+-- declencheur : mise a jour automatique du statut d’un equipement expire lors d’un UPDATE 
+GO
 CREATE OR ALTER TRIGGER trg_MAJStatutsiExpired
 ON Equipement
 AFTER UPDATE
@@ -421,7 +422,7 @@ BEGIN
         WHERE date_expiration < GETDATE()
     ) AND statutDisponibilite <> 'A renouveler';
 END;
-
+GO
 
 
 
