@@ -5,7 +5,7 @@ public class DbConnection {
     private Connection connection;
     // chaine de connexion pour sql server
     String nomBd= "Gestion_Caserne";
-    String instanceServeur= "localhost"; //serveur:port
+    String instanceServeur= "localhost:1433"; //serveur:port
     private String url = "jdbc:sqlserver://" + instanceServeur + ";" //instance par défaut
             + "databaseName="+nomBd+";"  //nom de la BD
             + "encrypt=true;" // chiffrer la connexion
