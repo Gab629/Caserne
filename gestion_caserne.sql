@@ -292,12 +292,15 @@ AND Equipe.idCaserne = Caserne.idCaserne
 AND Caserne.idCaserne = Couvert.idCaserne
 AND Couvert.idSecteur = Secteur.idSecteur;
 
---Trouver les véhicules associés à chaque caserne et équipe Afficher le nom de la caserne, le nom de l’équipe et le type de véhicule.
 
-SELECT Vehicule.typeVehicule, Caserne.nomCaserne, Equipe.nomEquipe
-FROM Caserne, Equipe, Vehicule
-WHERE Equipe.idCaserne = Caserne.idCaserne
-AND Vehicule.idEquipe = Equipe.idEquipe;
+--Trouver les véhicules associés à chaque caserne et équipe avec le nom d'un pompier. Afficher le nom de la caserne, le nom de l’équipe, le type de véhicule ainsi que le nom prénom d'un pompier.
+
+SELECT Vehicule.typeVehicule, Caserne.nomCaserne, Equipe.nomEquipe, Pompier.nom, Pompier.prenom
+FROM Equipe 
+JOIN Vehicule ON Vehicule.idEquipe = Equipe.idEquipe
+JOIN Caserne ON Caserne.idCaserne = Equipe.idCaserne
+JOIN Pompier ON Pompier.idEquipe = Equipe.idEquipe;
+
 
 --Lister les incidents où une caserne de renfort a été appelée, avec les répartiteurs responsables
 
@@ -310,7 +313,7 @@ JOIN RepartiteurUrgence ON Rapporte.numEmploye = RepartiteurUrgence.numEmploye
 WHERE Rapporte.CaserneRenfort IS NOT NULL;
 
 
---Afficher les incidents survenus après le 15 mars 2025
+--Afficher les incidents survenus après le 18 mars 2025
 SELECT * FROM Incident
 WHERE dateIncident > '2025-03-18';
 
@@ -355,9 +358,16 @@ JOIN Caserne ON Equipe.idCaserne = Caserne.idCaserne
 JOIN Couvert ON Caserne.idCaserne = Couvert.idCaserne
 JOIN Incident ON Incident.idSecteur = Couvert.idSecteur
 WHERE Pompier.poste = 'Chef de garde'
-  AND Vehicule.typeVehicule = 'Camion-Pompe';
+AND Vehicule.typeVehicule = 'Camion-Pompe';
 
-
+--Afficher le nom et prénom des pompiers ainsi que leur équipe dont l’équipement personnel est indisponible, est expiré ou est a nettoyer
+SELECT Pompier.nom, Pompier.prenom, Equipe.idEquipe, Equipement.idEquipement, Equipement.statutDisponibilite
+from equipementPerso
+join Equipement on Equipement.idEquipement = equipementPerso.idEquipement
+join Pompier on equipementPerso.idEmploye = Pompier.idEmploye
+join Equipe ON Pompier.idEquipe = Equipe.idEquipe
+where Equipement.statutDisponibilite IN ('Indisponible', 'A renouveler', 'A nettoyer') 
+AND Equipement.typeEquipement = 'Personnel';
 
 
 
