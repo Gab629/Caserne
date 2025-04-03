@@ -381,10 +381,8 @@ CREATE or alter PROCEDURE AjoutIncident (
 	)
 	AS
 	BEGIN
-		SET IDENTITY_INSERT Incident ON;
 		INSERT INTO Incident (typeIncident, dateIncident, gravité, adresseIncident, idSecteur)
 		VALUES (@ptypeIncident,@pdateIncident,@pgravite,@padresseIncident,@pidSecteur);
-		SET IDENTITY_INSERT Incident OFF;
 	END;
 GO
 execute AjoutIncident
