@@ -424,8 +424,15 @@ BEGIN
 END;
 GO
 
+-- tester le declancheur si la date est expirée : 
+UPDATE Equipement
+SET date_expiration = '2023-12-31' 
+WHERE idEquipement = 1;
 
-
+--on verifie avec : 
+SELECT idEquipement, statutDisponibilite, date_expiration
+FROM Equipement
+WHERE idEquipement = 1;
 
 
 
