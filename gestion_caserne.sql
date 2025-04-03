@@ -327,8 +327,73 @@ JOIN Secteur ON Incident.idSecteur = Secteur.idSecteur
 JOIN Couvert ON Secteur.idSecteur = Couvert.idSecteur
 JOIN Caserne ON Couvert.idCaserne = Couvert.idCaserne;
 
---Trouver les pompiers avec leur équipement personnel
-SELECT Pompier.nom, Pompier.prenom, Equipement.typeEquipement
+--Lister les casernes ayant au moins un incident de niveau 3 (sous-requete avce ANY)
+SELECT nomCaserne
+FROM Caserne
+WHERE idCaserne = ANY (
+    SELECT idCaserne
+    FROM Rapporte
+    JOIN Incident ON Rapporte.incidentId = Incident.incidentID
+    WHERE gravite = 3
+);
+
+--Lister les secteurs n’ayant jamais eu d’incidents grave (sous-requete avec IN)
+SELECT nomSecteur
+FROM Secteur
+WHERE idSecteur NOT IN (
+    SELECT idSecteur
+    FROM Incident
+    WHERE gravite = 3
+);
+
+--Lister les chefs de garde qui ont effectué des interventions avec des véhicules de type "Camion-Pompe" 
+SELECT Pompier.nom, Pompier.prenom, Pompier.poste, Vehicule.typeVehicule, Incident.incidentID, Incident.typeIncident, Incident.dateIncident
 FROM Pompier
-JOIN equipementPerso ON Pompier.idEmploye = equipementPerso.idEmploye
-JOIN Equipement ON equipementPerso.idEquipement = Equipement.idEquipement;
+JOIN Equipe ON Pompier.idEquipe = Equipe.idEquipe
+JOIN Vehicule ON Vehicule.idEquipe = Equipe.idEquipe
+JOIN Caserne ON Equipe.idCaserne = Caserne.idCaserne
+JOIN Couvert ON Caserne.idCaserne = Couvert.idCaserne
+JOIN Incident ON Incident.idSecteur = Couvert.idSecteur
+WHERE Pompier.poste = 'Chef de garde'
+  AND Vehicule.typeVehicule = 'Camion-Pompe';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+GO
+CREATE FUNCTION compterIncidentsSecteur (@idSecteur INT)
+RETURNS INT
+AS
+BEGIN
+    DECLARE @compteur INT;
+    SELECT @compteur = COUNT(*) -- Calcul du nombre d'incidents dans le secteur
+    FROM Incident
+    WHERE idSecteur = @idSecteur;
+    
+    RETURN @compteur;
+END;
+GO
+
+SELECT dbo.compterIncidentsSecteur(6) AS VieuxQuartier;
+
