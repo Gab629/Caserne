@@ -381,7 +381,7 @@ CREATE or alter PROCEDURE AjoutIncident (
 	)
 	AS
 	BEGIN
-		INSERT INTO Incident (typeIncident, dateIncident, gravité, adresseIncident, idSecteur)
+		INSERT INTO Incident (typeIncident, dateIncident, gravite, adresseIncident, idSecteur)
 		VALUES (@ptypeIncident,@pdateIncident,@pgravite,@padresseIncident,@pidSecteur);
 	END;
 GO
@@ -424,7 +424,7 @@ BEGIN
 END;
 GO
 
--- tester le declancheur si la date est expirée : 
+-- tester le declencheur si la date est expirée : 
 UPDATE Equipement
 SET date_expiration = '2023-12-31' 
 WHERE idEquipement = 1;

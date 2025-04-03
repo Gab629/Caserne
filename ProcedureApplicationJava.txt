@@ -1,3 +1,16 @@
+Premières étapes 
+
+1 - Ouvrir l'explorateur de fichier 
+
+2 - Copier et coller ceci pour trouver le SQL SERVER Configuration Manager : SQL SERVER Configuration Manager 
+
+	C:\Windows\SysWOW64\SQLServerManager16.msc
+
+3 - Activer le TCPIP (Voir alive code Module : Créer une app Java et SQL dans AliveCode - Activer le support du protocole de connexion TCPIP)
+
+4 - Redémarrer SQL Server (redemarrer votre ordinateur)
+
+
 VSCODE 
 
 1 - Ouvrir Azure et se connecter à la base de donné avec ces paramètres :
@@ -18,4 +31,5 @@ VSCODE
 6 - Faire (CTRL + SHIF + B) ou (CTRL + SHIFT + P -> Task:Run Build Task)
 
 7 - Run Java
+
 
