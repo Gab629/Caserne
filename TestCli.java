@@ -18,7 +18,7 @@ public class TestCli {
         	// GestionCaserne.afficherUnEmploye(1); //afficher employé avec id =2
             
         	// GestionCaserne.supprimerEmploye(6); //supprimer employé avec id =6
-
+            
 
             // fermer la connection à la base données, avant de quitter
             dbConnection.closeConnection();

@@ -21,7 +21,8 @@
             "vmArgs": "-Djava.library.path=${workspaceFolder}/library",
             "classPaths": [
                 "${workspaceFolder}/out",
-                "${workspaceFolder}/library/mssql-jdbc-12.10.0.jre8.jar"
+                "${workspaceFolder}/library/mssql-jdbc-12.10.0.jre8.jar",
+                "${workspaceFolder}/library/mssql-jdbc-12.10.0.jre11.jar"
             ]
         }
     ]
