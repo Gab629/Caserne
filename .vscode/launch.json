@@ -10,7 +10,7 @@
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}",
-            "vmArgs": "-Djava.library.path=C:/Users/gabga/Desktop/Productivity/UDEM/BaseDeDonnees/Projet/Caserne/library"
+            "vmArgs": "-Djava.library.path=${workspaceFolder}/library"
         },
         {
             "type": "java",
@@ -18,10 +18,10 @@
             "request": "launch",
             "mainClass": "TestCli",
             "projectName": "Caserne_62c84769",
-            "vmArgs": "-Djava.library.path=C:/Users/gabga/Desktop/Productivity/UDEM/BaseDeDonnees/Projet/Caserne/library",
+            "vmArgs": "-Djava.library.path=${workspaceFolder}/library",
             "classPaths": [
-                "C:/Users/gabga/Desktop/Productivity/UDEM/BaseDeDonnees/Projet/Caserne/out",
-                "C:/Users/gabga/Desktop/Productivity/UDEM/BaseDeDonnees/Projet/Caserne/library/mssql-jdbc-12.10.0.jre8.jar"
+                "${workspaceFolder}/out",
+                "${workspaceFolder}/library/mssql-jdbc-12.10.0.jre8.jar"
             ]
         }
     ]

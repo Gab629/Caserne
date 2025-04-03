@@ -1,0 +1,19 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Java Project",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-Command",
+                "$currentDir = Get-Location; $files = Get-ChildItem -Recurse -Filter '*.java' -Path $currentDir; javac -d \"$currentDir/out\" $files"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$javac"]
+        }
+    ]
+}

@@ -1,0 +1,21 @@
+VSCODE 
+
+1 - Ouvrir Azure et se connecter à la base de donné avec ces paramètres :
+
+	Connection type : Microsoft SQL Server
+	Server : localhost
+	Database : Gestion_Caserne
+	Trust server certificate : True
+
+2 - Ouvrir le dossier du projet (le dossier Caserne) sur VSCode
+
+3 - Cliquer sur Caserne.code-workspace
+
+4 - Cliquer sur open workspace
+
+5 - Cliquer sur TestCli.java
+
+6 - Faire (CTRL + SHIF + B) ou (CTRL + SHIFT + P -> Task:Run Build Task)
+
+7 - Run Java
+
