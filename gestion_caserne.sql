@@ -35,7 +35,7 @@ CREATE TABLE Incident (
 	Foreign key(idSecteur) references Secteur(idSecteur),
 	PRIMARY KEY (incidentID, dateIncident, adresseIncident)
 	);
-
+	
 CREATE TABLE Equipement (
 	idEquipement int PRIMARY KEY,
 	typeEquipement nvarchar(50),
@@ -123,19 +123,19 @@ CREATE TABLE equipementPerso(
 
 --insertion de valeurs dans les tables
 
-INSERT INTO Secteur (codePostal, nomSecteur, limitesGeographique) 
-VALUES ('J5A 1A1','Centre-Ville', 'Rue A à Rue C'), 
-('J5A 1A2','Quartier Nord', 'Rue D à Rue F'), 
-('J5A 1A3','Quartier Sud', 'Rue G à Rue I'),
-('J5A 1A4','Quartier Est', 'Rue J à Rue L'),
-('J5A 1A5','Quartier Ouest', 'Rue M à Rue O'),
-('J5A 1A6','Vieux Quartier', 'Rue P à Rue R'),
-('J5A 1A7','Quartier Industriel', 'Rue S à Rue U'),
-('J5A 1A8','Rosemont', 'Rue V à Rue Z');
+INSERT INTO Secteur (idSecteur, codePostal, nomSecteur, limitesGéographique) 
+VALUES (1,'J5A 1A1','Centre-Ville', 'Rue A à Rue C'), 
+(2,'J5A 1A2','Quartier Nord', 'Rue D à Rue F'), 
+(3,'J5A 1A3','Quartier Sud', 'Rue G à Rue I'),
+(4,'J5A 1A4','Quartier Est', 'Rue J à Rue L'),
+(5,'J5A 1A5','Quartier Ouest', 'Rue M à Rue O'),
+(6,'J5A 1A6','Vieux Quartier', 'Rue P à Rue R'),
+(7,'J5A 1A7','Quartier Industriel', 'Rue S à Rue U'),
+(8,'J5A 1A8','Rosemont', 'Rue V à Rue Z');
 select * from Secteur;
 
 SET IDENTITY_INSERT Incident ON;
-INSERT INTO Incident (incidentID, typeIncident, dateIncident, gravite, adresseIncident, idSecteur)
+INSERT INTO Incident (incidentID, typeIncident, dateIncident, gravité, adresseIncident, idSecteur)
 VALUES 
 (1, 'Incendie', '2025-03-15', 3, '500 Rue Saint-Antoine O, Montréal, QC', 3),
 (2, 'Accident de la route', '2025-03-16', 2, 'Avenue du Parc, Montréal, QC', 5),
@@ -369,27 +369,27 @@ join Equipe ON Pompier.idEquipe = Equipe.idEquipe
 where Equipement.statutDisponibilite IN ('Indisponible', 'A renouveler', 'A nettoyer') 
 AND Equipement.typeEquipement = 'Personnel';
 
+--procédure pour ajouter des incidents
+GO
+CREATE or alter PROCEDURE AjoutIncident (
+	--incidentId va s'auto-incrémenter
+	@ptypeIncident VARCHAR(30),
+	@pdateIncident DATE,
+	@pgravite int,
+	@padresseIncident VARCHAR(100),
+	@pidSecteur int
+	)
+	AS
+	BEGIN
+		INSERT INTO Incident (typeIncident, dateIncident, gravité, adresseIncident, idSecteur)
+		VALUES (@ptypeIncident,@pdateIncident,@pgravite,@padresseIncident,@pidSecteur);
+	END;
+GO
+execute AjoutIncident
+'Incendie', '2025-01-04', 2,'2759 Blvd Edouard Montpetit, Montreal, Qc', 1;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Go
+select * from Incident;
 
 GO
 CREATE FUNCTION compterIncidentsSecteur (@idSecteur INT)
@@ -406,4 +406,34 @@ END;
 GO
 
 SELECT dbo.compterIncidentsSecteur(6) AS VieuxQuartier;
+
+
+-- declancheur : mise a jour automatique du statut d’un equipement expire lors d’un UPDATE 
+CREATE OR ALTER TRIGGER trg_MAJStatutsiExpired
+ON Equipement
+AFTER UPDATE
+AS
+BEGIN
+    UPDATE Equipement
+    SET statutDisponibilite = 'A renouveler'
+    WHERE idEquipement IN (
+        SELECT idEquipement FROM INSERTED
+        WHERE date_expiration < GETDATE()
+    ) AND statutDisponibilite <> 'A renouveler';
+END;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
