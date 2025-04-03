@@ -391,25 +391,6 @@ execute AjoutIncident
 Go
 select * from Incident;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 GO
 CREATE FUNCTION compterIncidentsSecteur (@idSecteur INT)
 RETURNS INT
@@ -425,4 +406,23 @@ END;
 GO
 
 SELECT dbo.compterIncidentsSecteur(6) AS VieuxQuartier;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
