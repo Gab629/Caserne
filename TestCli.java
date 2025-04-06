@@ -6,7 +6,7 @@ public class TestCli {
         try {
         	//openConnection
         	DbConnection dbConnection = DbConnection.getInstance();
-        	System.out.println("Connexion à la BD ouverte avec Succés");
+        	System.out.println("Connexion à la BD ouverte avec Succès!");
         	
 
         	GestionCaserne.afficherSecteurs(); //Afficher les secteurs
@@ -22,7 +22,7 @@ public class TestCli {
 
             // fermer la connection à la base données, avant de quitter
             dbConnection.closeConnection();
-            System.out.println("Connexion à la BD fermée avec Succés");
+            System.out.println("Connexion à la BD fermée avec Succès");
         } 
         catch (SQLException e) { //une gestion simple des erreurs de la BD
             System.err.println("Erreur de BD: " + e.getMessage());

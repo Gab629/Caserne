@@ -18,6 +18,7 @@ public class DbConnection {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             this.connection = DriverManager.getConnection(url, null, null);
+        
         } catch (ClassNotFoundException ex) {
             System.out.println("SQL Server JDBC Driver non trouvé: " + ex.getMessage());
         }

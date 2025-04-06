@@ -123,7 +123,7 @@ CREATE TABLE equipementPerso(
 
 --insertion de valeurs dans les tables
 
-INSERT INTO Secteur (idSecteur, codePostal, nomSecteur, limitesGéographique) 
+INSERT INTO Secteur (idSecteur, codePostal, nomSecteur, limitesGeographique) 
 VALUES (1,'J5A 1A1','Centre-Ville', 'Rue A à Rue C'), 
 (2,'J5A 1A2','Quartier Nord', 'Rue D à Rue F'), 
 (3,'J5A 1A3','Quartier Sud', 'Rue G à Rue I'),
@@ -133,6 +133,7 @@ VALUES (1,'J5A 1A1','Centre-Ville', 'Rue A à Rue C'),
 (7,'J5A 1A7','Quartier Industriel', 'Rue S à Rue U'),
 (8,'J5A 1A8','Rosemont', 'Rue V à Rue Z');
 select * from Secteur;
+
 
 SET IDENTITY_INSERT Incident ON;
 INSERT INTO Incident (incidentID, typeIncident, dateIncident, gravité, adresseIncident, idSecteur)

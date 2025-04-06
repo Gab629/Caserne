@@ -10,16 +10,16 @@ public class GestionCaserne {
     	System.out.println("-------Afficher tous les Secteurs-----------" );
     	System.out.println("--------------------------------------------" );
     	
-    	String sqlcmd = "SELECT codePostal, nomSecteur, limitesGeographique FROM Secteur;";
+    	String sqlcmd = "SELECT codePostal, nomSecteur, limitesGéographique FROM Secteur;";
         PreparedStatement pstmt = dbConnection.prepareStatement(sqlcmd);
         ResultSet rs = pstmt.executeQuery(); //le resultSet contient plusieurs enregistrements
         
-        System.out.println("codePostal" + "\t | \t" + "nomSecteur" + "\t | \t" + "limitesGeographique" );
+        System.out.println("codePostal" + "\t | \t" + "nomSecteur" + "\t | \t" + "limitesGéographique" );
         System.out.println("-------------------------------------" );
         while (rs.next()) {
             String codePostal = rs.getString("codePostal"); 
             String nomSecteur = rs.getString("nomSecteur");
-            String limitesGeographique = rs.getString("limitesGeographique"); 
+            String limitesGeographique = rs.getString("limitesGéographique"); 
             System.out.println(codePostal + "\t | \t" + nomSecteur + "\t | \t" + limitesGeographique);  
         }
         // fermer le dataset
