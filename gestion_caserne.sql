@@ -22,7 +22,7 @@ CREATE TABLE Secteur (
 	idSecteur int IDENTITY PRIMARY KEY,
 	codePostal char (7) CHECK (codePostal LIKE '[A-Z][0-9][A-Z] [0-9][A-Z][0-9]'),
 	nomSecteur nvarchar (50) NOT NULL, --Limite le char au texte
-	limitesGeographique text
+	limitesGéographique text
 	);
 
 CREATE TABLE Incident (
@@ -123,7 +123,7 @@ CREATE TABLE equipementPerso(
 
 --insertion de valeurs dans les tables
 
-INSERT INTO Secteur (idSecteur, codePostal, nomSecteur, limitesGeographique) 
+INSERT INTO Secteur (idSecteur, codePostal, nomSecteur, limitesGéographique) 
 VALUES (1,'J5A 1A1','Centre-Ville', 'Rue A à Rue C'), 
 (2,'J5A 1A2','Quartier Nord', 'Rue D à Rue F'), 
 (3,'J5A 1A3','Quartier Sud', 'Rue G à Rue I'),
