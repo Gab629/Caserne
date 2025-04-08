@@ -1,5 +1,6 @@
-/*CREATE DATABASE Gestion_Caserne;
-go*/
+DROP DATABASE IF EXISTS Gestion_Caserne;
+CREATE DATABASE Gestion_Caserne;
+go
 Use Gestion_Caserne;
 GO
 
