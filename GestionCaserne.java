@@ -28,4 +28,30 @@ public class GestionCaserne {
         pstmt.close();
         System.out.println("\n\n");
     }
+
+    //INSERT
+    public static void InsererPompier(String nom,  String prenom, String poste, String numTel, int idEquipe) throws SQLException {
+    	DbConnection dbConnection = DbConnection.getInstance();
+    	System.out.println("-----------------------------------------" );
+    	System.out.println("-------Insérer un pompier ---------------" );
+    	System.out.println("-----------------------------------------" );
+    	
+        //cette requête est paramètée, les ? remplacent des valeurs
+    	String sqlcmd = "INSERT INTO Pompier(nom, prenom, poste, numTel, idEquipe) VALUES (?, ?, ?, ?, ?);";
+    	
+    	//pstmt sera utiliser pour remplacer les ? par des valeurs puis exécuter la requête
+        PreparedStatement pstmt = dbConnection.prepareStatement(sqlcmd);
+        pstmt.setString(1, nom); // 2ème paramètre: 
+        pstmt.setString(2, prenom); // 3ème paramètre: 
+        pstmt.setString(3, poste); // 4ème paramètre: 
+        pstmt.setString(4, numTel); // 5ème paramètre: 
+        pstmt.setInt(5, idEquipe); // 6ème paramètre: 
+        
+        int nbLignesAffectees = pstmt.executeUpdate(); //exécution
+        
+        
+        // fermer le prepared statement
+        pstmt.close();
+        System.out.println("Insertion terminée, " + nbLignesAffectees + " Ligne(s) affectée(s)\n\n");
+    }
 }

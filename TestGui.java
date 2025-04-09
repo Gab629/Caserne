@@ -6,7 +6,7 @@ import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
 public class TestGui extends JFrame {
 	
-    private JTextField tfId, tfNom, tfPrenom;
+    private JTextField tfNom, tfPrenom, tfposte, tfnumTel, tfIdEquipe;
     private JButton btnInserer, btnSupprimer, btnModifier, btnChercher;
     private static final long serialVersionUID = -4939544011287453046L;
     private DbConnection dbConnection;
@@ -25,9 +25,11 @@ public class TestGui extends JFrame {
 
         
         // Création des composants
-        tfId = new JTextField(10);
         tfNom = new JTextField(10);
         tfPrenom = new JTextField(10);
+        tfposte = new JTextField(10);
+        tfnumTel = new JTextField(12);
+        tfIdEquipe = new JTextField(10);
         btnInserer = new JButton("Insérer");
         btnSupprimer = new JButton("Supprimer");
         btnModifier = new JButton("Modifier");
@@ -36,12 +38,16 @@ public class TestGui extends JFrame {
         
         
         // Ajout des composants à la fenêtre
-        contentPane.add(new JLabel("ID"));
-        contentPane.add(tfId);
         contentPane.add(new JLabel("Nom"));
         contentPane.add(tfNom);
         contentPane.add(new JLabel("Prénom"));
         contentPane.add(tfPrenom);
+        contentPane.add(new JLabel("Poste"));
+        contentPane.add(tfposte);
+        contentPane.add(new JLabel("numTel"));
+        contentPane.add(tfnumTel);
+        contentPane.add(new JLabel("ID de l'équipe"));
+        contentPane.add(tfIdEquipe);
         contentPane.add(btnInserer);
         contentPane.add(btnSupprimer);
         contentPane.add(btnModifier);
@@ -57,7 +63,7 @@ public class TestGui extends JFrame {
         
         btnInserer.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // insererAction();
+                insererAction();
             }
         });
         
@@ -94,23 +100,25 @@ public class TestGui extends JFrame {
     	}
     }
     
-    // private void insererAction() {
-    //     try {
-    //         int id = Integer.parseInt(tfId.getText());
-    //         String nom = tfNom.getText();
-    //         String prenom = tfPrenom.getText();
-    //         if(nom.equals("") || prenom.equals("") ) {
-    //        	 JOptionPane.showMessageDialog(this, "Vous devez remplir tous les champs pour insérer un employé","Erreur", JOptionPane.ERROR_MESSAGE);
-    //        }
-    //        else {
-	//             EmployeDAO.InsererEmploye(id, nom, prenom);
-	//             JOptionPane.showMessageDialog(this, "Employé inséré avec succès");
-    //        }
-    //     } catch (SQLException ex) {
-    //         ex.printStackTrace();
-    //         JOptionPane.showMessageDialog(this, "Erreur d'insertion : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
-    //     }
-    // }
+    private void insererAction() {
+        try {
+            String nom = tfNom.getText();
+            String prenom = tfPrenom.getText();
+            String poste = tfposte.getText();
+            String numTel = tfnumTel.getText();
+            int idEquipe = Integer.parseInt(tfIdEquipe.getText());
+            if(nom.equals("") || prenom.equals("") || poste.equals("") || numTel.equals("") || tfIdEquipe.getText().trim().isEmpty()) {
+           	 JOptionPane.showMessageDialog(this, "Vous devez remplir tous les champs pour insérer un pompier","Erreur", JOptionPane.ERROR_MESSAGE);
+           }
+           else {
+	            GestionCaserne.InsererPompier(nom, prenom, poste, numTel, idEquipe);
+	            JOptionPane.showMessageDialog(this, "Employé inséré avec succès");
+           }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Erreur d'insertion : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
+}
     
     // private void supprimerAction() {
     //     try {

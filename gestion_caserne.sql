@@ -197,19 +197,18 @@ select * from Equipe;
 
 
 
-SET IDENTITY_INSERT Pompier ON;
-INSERT INTO Pompier (idEmploye, nom, prenom, numTel, poste, idEquipe)
+INSERT INTO Pompier (nom, prenom, numTel, poste, idEquipe)
 VALUES 
-(1, 'Dupont', 'Jean', '061-234-5678', 'Chef de Corps', 1),
-(2, 'Leclerc', 'Marie', '062-345-6789', 'Officier de garde', 2),
-(3, 'Martin', 'Pierre', '063-456-7890', 'Sapeur-Pompier', 3),
-(4, 'Moreau', 'Sophie', '064-567-8901', 'Sapeur-Pompier', 4),
-(5, 'Lemoine', 'Alexandre', '065-678-9012', 'Sapeur-Pompier', 5),
-(6, 'Bernard', 'Claire', '066-789-0123', 'Chef de garde', 6),
-(7, 'Garnier', 'David', '067-890-1234', 'Sapeur-Pompier', 7),
-(8, 'Robert', 'Chloé', '068-901-2345', 'Officier de garde', 8);
+('Dupont', 'Jean', '061-234-5678', 'Chef de Corps', 1),
+('Leclerc', 'Marie', '062-345-6789', 'Officier de garde', 2),
+('Martin', 'Pierre', '063-456-7890', 'Sapeur-Pompier', 3),
+('Moreau', 'Sophie', '064-567-8901', 'Sapeur-Pompier', 4),
+('Lemoine', 'Alexandre', '065-678-9012', 'Sapeur-Pompier', 5),
+('Bernard', 'Claire', '066-789-0123', 'Chef de garde', 6),
+('Garnier', 'David', '067-890-1234', 'Sapeur-Pompier', 7),
+('Robert', 'Chloé', '068-901-2345', 'Officier de garde', 8);
 select * from Pompier;
-SET IDENTITY_INSERT Pompier OFF;
+
 
 INSERT INTO equipementPerso(idEquipement, idEmploye)
 VALUES (11, 1),
@@ -284,6 +283,8 @@ INSERT INTO Rapporte (incidentId, dateIncident, adresseIncident, numEmploye, idC
 (8, '2025-03-22', '1500 Boulevard René-Lévesque O, Montréal, QC', 8, 8, 5);
 select * from Rapporte;
 
+
+SELECT * FROM Pompier;
 
 --Lister les noms et prenoms des pompiers avec leur équipe, caserne et le secteur couvert par leur caserne
 
