@@ -19,8 +19,8 @@ public class GestionCaserne {
         while (rs.next()) {
             String codePostal = rs.getString("codePostal"); 
             String nomSecteur = rs.getString("nomSecteur");
-            String limitesGeographique = rs.getString("limitesGéographique"); 
-            System.out.println(codePostal + "\t | \t" + nomSecteur + "\t | \t" + limitesGeographique);  
+            String limitesGéographique = rs.getString("limitesGéographique"); 
+            System.out.println(codePostal + "\t | \t" + nomSecteur + "\t | \t" + limitesGéographique);  
         }
         // fermer le dataset
         rs.close();

@@ -20,7 +20,7 @@ DROP TABLE IF EXISTS Secteur;
 --Creation des tables
 
 CREATE TABLE Secteur (
-	idSecteur int IDENTITY PRIMARY KEY,
+	idSecteur int PRIMARY KEY,
 	codePostal char (7) CHECK (codePostal LIKE '[A-Z][0-9][A-Z] [0-9][A-Z][0-9]'),
 	nomSecteur nvarchar (50) NOT NULL, --Limite le char au texte
 	limitesGéographique text
@@ -137,7 +137,7 @@ select * from Secteur;
 
 
 SET IDENTITY_INSERT Incident ON;
-INSERT INTO Incident (incidentID, typeIncident, dateIncident, gravité, adresseIncident, idSecteur)
+INSERT INTO Incident (incidentID, typeIncident, dateIncident, gravite, adresseIncident, idSecteur)
 VALUES 
 (1, 'Incendie', '2025-03-15', 3, '500 Rue Saint-Antoine O, Montréal, QC', 3),
 (2, 'Accident de la route', '2025-03-16', 2, 'Avenue du Parc, Montréal, QC', 5),

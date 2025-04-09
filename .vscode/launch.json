@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "TestGui",
+            "request": "launch",
+            "mainClass": "TestGui",
+            "projectName": "Caserne_62c84769"
+        },
+        {
+            "type": "java",
             "name": "TestCli",
             "request": "launch",
             "mainClass": "TestCli",
@@ -28,7 +35,8 @@
             "classPaths": [
                 "${workspaceFolder}/out",
                 "${workspaceFolder}/library/mssql-jdbc-12.10.0.jre8.jar",
-                "${workspaceFolder}/library/mssql-jdbc-12.10.0.jre11.jar"
+                "${workspaceFolder}/library/mssql-jdbc-12.10.0.jre11.jar",
+                "${workspaceFolder}/library/mssql-jdbc-12.6.0.jre8.jar"
             ]
         }
     ]
