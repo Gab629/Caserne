@@ -30,22 +30,23 @@ public class GestionCaserne {
     }
 
     //INSERT
-    public static void InsererPompier(String nom,  String prenom, String poste, String numTel, int idEquipe) throws SQLException {
+    public static void InsererPompier(int idEmploye, String nom,  String prenom, String poste, String numTel, int idEquipe) throws SQLException {
     	DbConnection dbConnection = DbConnection.getInstance();
     	System.out.println("-----------------------------------------" );
     	System.out.println("-------Insérer un pompier ---------------" );
     	System.out.println("-----------------------------------------" );
     	
         //cette requête est paramètée, les ? remplacent des valeurs
-    	String sqlcmd = "INSERT INTO Pompier(nom, prenom, poste, numTel, idEquipe) VALUES (?, ?, ?, ?, ?);";
+    	String sqlcmd = "INSERT INTO Pompier(idEmploye, nom, prenom, poste, numTel, idEquipe) VALUES (?, ?, ?, ?, ?, ?);";
     	
     	//pstmt sera utiliser pour remplacer les ? par des valeurs puis exécuter la requête
         PreparedStatement pstmt = dbConnection.prepareStatement(sqlcmd);
-        pstmt.setString(1, nom); // 2ème paramètre: 
-        pstmt.setString(2, prenom); // 3ème paramètre: 
-        pstmt.setString(3, poste); // 4ème paramètre: 
-        pstmt.setString(4, numTel); // 5ème paramètre: 
-        pstmt.setInt(5, idEquipe); // 6ème paramètre: 
+        pstmt.setInt(1, idEmploye); // 6ème paramètre: 
+        pstmt.setString(2, nom); // 2ème paramètre: 
+        pstmt.setString(3, prenom); // 3ème paramètre: 
+        pstmt.setString(4, poste); // 4ème paramètre: 
+        pstmt.setString(5, numTel); // 5ème paramètre: 
+        pstmt.setInt(6, idEquipe); // 6ème paramètre: 
         
         int nbLignesAffectees = pstmt.executeUpdate(); //exécution
         
@@ -54,4 +55,25 @@ public class GestionCaserne {
         pstmt.close();
         System.out.println("Insertion terminée, " + nbLignesAffectees + " Ligne(s) affectée(s)\n\n");
     }
+
+    //DELETE
+    public static void supprimerPompier (int idEmploye) throws SQLException{
+    	DbConnection dbConnection = DbConnection.getInstance();
+    	System.out.println("--------------------------------------------------" );
+    	System.out.println("-------supprimer un pompier par id ---------------" );
+    	System.out.println("--------------------------------------------------" );
+    	
+    	String sqlcmd = "DELETE FROM Pompier where idEmploye = ?;";
+    	
+    	//pstmt sera utiliser pour remplacer les ? par des valeurs puis exécuter la requête
+        PreparedStatement pstmt = dbConnection.prepareStatement(sqlcmd);
+        pstmt.setInt(1, idEmploye); 
+         
+        int nbLignesAffectees = pstmt.executeUpdate(); //exécution
+        
+        // fermer le prepared statement
+        pstmt.close();
+        System.out.println("Suppression terminée, " + nbLignesAffectees + " Ligne(s) affectée(s)\n\n");;
+    }
+    
 }

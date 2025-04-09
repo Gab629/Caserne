@@ -105,7 +105,7 @@ CREATE TABLE Vehicule (
 	);
 
 CREATE TABLE Pompier (
-	idEmploye int PRIMARY KEY identity(1,1),
+	idEmploye int PRIMARY KEY,
 	nom varchar (50) NOT NULL,
 	prenom varchar (50) NOT NULL,
 	poste varchar (50),
@@ -113,6 +113,7 @@ CREATE TABLE Pompier (
 	idEquipe int,
 	FOREIGN KEY (idEquipe) REFERENCES Equipe(idEquipe) on delete cascade
 	);
+
 
 CREATE TABLE equipementPerso(
 	idEquipement int,
@@ -197,16 +198,16 @@ select * from Equipe;
 
 
 
-INSERT INTO Pompier (nom, prenom, numTel, poste, idEquipe)
+INSERT INTO Pompier (idEmploye, nom, prenom, numTel, poste, idEquipe)
 VALUES 
-('Dupont', 'Jean', '061-234-5678', 'Chef de Corps', 1),
-('Leclerc', 'Marie', '062-345-6789', 'Officier de garde', 2),
-('Martin', 'Pierre', '063-456-7890', 'Sapeur-Pompier', 3),
-('Moreau', 'Sophie', '064-567-8901', 'Sapeur-Pompier', 4),
-('Lemoine', 'Alexandre', '065-678-9012', 'Sapeur-Pompier', 5),
-('Bernard', 'Claire', '066-789-0123', 'Chef de garde', 6),
-('Garnier', 'David', '067-890-1234', 'Sapeur-Pompier', 7),
-('Robert', 'Chloé', '068-901-2345', 'Officier de garde', 8);
+(1, 'Dupont', 'Jean', '061-234-5678', 'Chef de Corps', 1),
+(2, 'Leclerc', 'Marie', '062-345-6789', 'Officier de garde', 2),
+(3, 'Martin', 'Pierre', '063-456-7890', 'Sapeur-Pompier', 3),
+(4, 'Moreau', 'Sophie', '064-567-8901', 'Sapeur-Pompier', 4),
+(5, 'Lemoine', 'Alexandre', '065-678-9012', 'Sapeur-Pompier', 5),
+(6, 'Bernard', 'Claire', '066-789-0123', 'Chef de garde', 6),
+(7, 'Garnier', 'David', '067-890-1234', 'Sapeur-Pompier', 7),
+(8, 'Robert', 'Chloé', '068-901-2345', 'Officier de garde', 8);
 select * from Pompier;
 
 

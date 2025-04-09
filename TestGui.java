@@ -6,7 +6,7 @@ import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
 public class TestGui extends JFrame {
 	
-    private JTextField tfNom, tfPrenom, tfposte, tfnumTel, tfIdEquipe;
+    private JTextField tfIDEmploye, tfNom, tfPrenom, tfposte, tfnumTel, tfIdEquipe;
     private JButton btnInserer, btnSupprimer, btnModifier, btnChercher;
     private static final long serialVersionUID = -4939544011287453046L;
     private DbConnection dbConnection;
@@ -25,6 +25,7 @@ public class TestGui extends JFrame {
 
         
         // Création des composants
+        tfIDEmploye = new JTextField(10);
         tfNom = new JTextField(10);
         tfPrenom = new JTextField(10);
         tfposte = new JTextField(10);
@@ -38,6 +39,8 @@ public class TestGui extends JFrame {
         
         
         // Ajout des composants à la fenêtre
+        contentPane.add(new JLabel("ID de l'employé"));
+        contentPane.add(tfIDEmploye);
         contentPane.add(new JLabel("Nom"));
         contentPane.add(tfNom);
         contentPane.add(new JLabel("Prénom"));
@@ -69,7 +72,7 @@ public class TestGui extends JFrame {
         
         btnSupprimer.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // supprimerAction();
+                supprimerAction();
             }
         });
         
@@ -102,16 +105,17 @@ public class TestGui extends JFrame {
     
     private void insererAction() {
         try {
+            int idEmploye = Integer.parseInt(tfIDEmploye.getText());
             String nom = tfNom.getText();
             String prenom = tfPrenom.getText();
             String poste = tfposte.getText();
             String numTel = tfnumTel.getText();
             int idEquipe = Integer.parseInt(tfIdEquipe.getText());
-            if(nom.equals("") || prenom.equals("") || poste.equals("") || numTel.equals("") || tfIdEquipe.getText().trim().isEmpty()) {
+            if(tfIDEmploye.getText().trim().isEmpty() || nom.equals("") || prenom.equals("") || poste.equals("") || numTel.equals("") || tfIdEquipe.getText().trim().isEmpty()) {
            	 JOptionPane.showMessageDialog(this, "Vous devez remplir tous les champs pour insérer un pompier","Erreur", JOptionPane.ERROR_MESSAGE);
            }
            else {
-	            GestionCaserne.InsererPompier(nom, prenom, poste, numTel, idEquipe);
+	            GestionCaserne.InsererPompier(idEmploye ,nom, prenom, poste, numTel, idEquipe);
 	            JOptionPane.showMessageDialog(this, "Employé inséré avec succès");
            }
         } catch (SQLException ex) {
@@ -120,17 +124,17 @@ public class TestGui extends JFrame {
         }
 }
     
-    // private void supprimerAction() {
-    //     try {
-    //         int id = Integer.parseInt(tfId.getText());
-    //     	EmployeDAO.supprimerEmploye(id);
-    //         JOptionPane.showMessageDialog(this, "Employé supprimé avec succès");
+    private void supprimerAction() {
+        try {
+            int idEmploye = Integer.parseInt(tfIDEmploye.getText());
+        	GestionCaserne.supprimerPompier(idEmploye);;
+            JOptionPane.showMessageDialog(this, "Employé supprimé avec succès");
             
-    //     } catch (SQLException ex) {
-    //         ex.printStackTrace();
-    //         JOptionPane.showMessageDialog(this, "Erreur de suppression : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
-    //     }
-    // }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Erreur de suppression : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     
 //     private void ModifierAction() {
 //    	 try {
