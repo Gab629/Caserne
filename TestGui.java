@@ -8,6 +8,12 @@ public class TestGui extends JFrame {
 	
     private JTextField tfIDEmploye, tfNom, tfPrenom, tfposte, tfnumTel, tfIdEquipe;
     private JButton btnInserer, btnSupprimer, btnModifier, btnChercher;
+
+    // Pour les secteurs
+    private JButton btnAfficherSecteurs;
+    private JTextArea taSecteurs;
+
+
     private static final long serialVersionUID = -4939544011287453046L;
     private DbConnection dbConnection;
     
@@ -16,12 +22,24 @@ public class TestGui extends JFrame {
     	
     	super("Gestion Caserne Pompier");
     	setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        //this.setSize( 600, 400 );
+        this.setSize( 600, 400 );
         this.setLocationRelativeTo( null );
         this.setResizable(false);
         
-        JPanel contentPane = (JPanel) this.getContentPane();
-        contentPane.setLayout( new FlowLayout() );
+
+        // Le panel principal empile tout verticalement
+        JPanel panelPrincipal = new JPanel();
+        panelPrincipal.setLayout(new BoxLayout(panelPrincipal, BoxLayout.Y_AXIS));
+        this.setContentPane(panelPrincipal);  
+        
+        // Panel pour les pompiers 
+        JPanel panelPompier = new JPanel(new FlowLayout());
+        panelPompier.setLayout( new FlowLayout() );
+
+        // Le panel des secteurs
+        JPanel panelSecteurs = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        
+
 
         
         // Création des composants
@@ -35,26 +53,43 @@ public class TestGui extends JFrame {
         btnSupprimer = new JButton("Supprimer");
         btnModifier = new JButton("Modifier");
         btnChercher = new JButton("Chercher");
-        
-        
+
+        // Pour les secteurs
+        btnAfficherSecteurs = new JButton("Afficher Secteurs");
+        taSecteurs = new JTextArea(10, 50);
+        taSecteurs.setEditable(false);
+        JScrollPane scrollSecteurs = new JScrollPane(taSecteurs);
+
         
         // Ajout des composants à la fenêtre
-        contentPane.add(new JLabel("ID de l'employé"));
-        contentPane.add(tfIDEmploye);
-        contentPane.add(new JLabel("Nom"));
-        contentPane.add(tfNom);
-        contentPane.add(new JLabel("Prénom"));
-        contentPane.add(tfPrenom);
-        contentPane.add(new JLabel("Poste"));
-        contentPane.add(tfposte);
-        contentPane.add(new JLabel("numTel"));
-        contentPane.add(tfnumTel);
-        contentPane.add(new JLabel("ID de l'équipe"));
-        contentPane.add(tfIdEquipe);
-        contentPane.add(btnInserer);
-        contentPane.add(btnSupprimer);
-        contentPane.add(btnModifier);
-        contentPane.add(btnChercher);
+        panelPompier.add(new JLabel("ID de l'employé"));
+        panelPompier.add(tfIDEmploye);
+        panelPompier.add(new JLabel("Nom"));
+        panelPompier.add(tfNom);
+        panelPompier.add(new JLabel("Prénom"));
+        panelPompier.add(tfPrenom);
+        panelPompier.add(new JLabel("Poste"));
+        panelPompier.add(tfposte);
+        panelPompier.add(new JLabel("numTel"));
+        panelPompier.add(tfnumTel);
+        panelPompier.add(new JLabel("ID de l'équipe"));
+        panelPompier.add(tfIdEquipe);
+        panelPompier.add(btnInserer);
+        panelPompier.add(btnSupprimer);
+        panelPompier.add(btnModifier);
+        panelPompier.add(btnChercher);
+
+        //Pour les secteurs
+        panelSecteurs.add(btnAfficherSecteurs);
+        panelSecteurs.add(scrollSecteurs);
+        panelPompier.add(panelSecteurs);
+
+
+
+        // Ajout des panels au panel principal
+        panelPrincipal.add(panelPompier);
+        panelPrincipal.add(panelSecteurs);
+
         
         // Gestion des événements
         addWindowListener(new WindowAdapter() {
@@ -85,6 +120,19 @@ public class TestGui extends JFrame {
         btnChercher.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // chercherAction();
+            }
+        });
+
+        btnAfficherSecteurs.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                try {
+                    String result = GestionCaserne.afficherSecteurs();
+                    taSecteurs.setText(result);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Erreur lors de l'affichage des secteurs : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
         

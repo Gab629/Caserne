@@ -4,29 +4,32 @@ import java.sql.SQLException;
 
 public class GestionCaserne {
     
-    public static void afficherSecteurs() throws SQLException {
+    public static String afficherSecteurs() throws SQLException {
     	DbConnection dbConnection = DbConnection.getInstance();
-    	System.out.println("--------------------------------------------" );
-    	System.out.println("-------Afficher tous les Secteurs-----------" );
-    	System.out.println("--------------------------------------------" );
+
+        StringBuilder sb = new StringBuilder();
+    	sb.append("------------------------------------------------------------------\n" );
+    	sb.append("     Afficher tous les Secteurs      \n" );
+    	sb.append("------------------------------------------------------------------\n" );
     	
     	String sqlcmd = "SELECT codePostal, nomSecteur, limitesGéographique FROM Secteur;";
         PreparedStatement pstmt = dbConnection.prepareStatement(sqlcmd);
         ResultSet rs = pstmt.executeQuery(); //le resultSet contient plusieurs enregistrements
         
-        System.out.println("codePostal" + "\t | \t" + "nomSecteur" + "\t | \t" + "limitesGéographique" );
-        System.out.println("-------------------------------------" );
+        sb.append("codePostal | nomSecteur | limitesGéographique\n" );
+        sb.append("------------------------------------------------------------------\n" );
         while (rs.next()) {
             String codePostal = rs.getString("codePostal"); 
             String nomSecteur = rs.getString("nomSecteur");
             String limitesGéographique = rs.getString("limitesGéographique"); 
-            System.out.println(codePostal + "\t | \t" + nomSecteur + "\t | \t" + limitesGéographique);  
+            sb.append(codePostal + "   |    " + nomSecteur + "    |    " + limitesGéographique);  
+            sb.append("\n");
         }
         // fermer le dataset
         rs.close();
         // fermer le prepared statement
         pstmt.close();
-        System.out.println("\n\n");
+        return sb.toString();
     }
 
     //INSERT
