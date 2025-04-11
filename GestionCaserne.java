@@ -78,5 +78,36 @@ public class GestionCaserne {
         pstmt.close();
         System.out.println("Suppression terminée, " + nbLignesAffectees + " Ligne(s) affectée(s)\n\n");;
     }
+
+    public static String afficherPompierDansEquipe(int equipeID) throws SQLException {
+    	DbConnection dbConnection = DbConnection.getInstance();
+
+        StringBuilder sb = new StringBuilder();
+    	sb.append("------------------------------------------------------------------------\n" );
+    	sb.append("     Afficher tous les Pompiers dans une équipe      \n" );
+    	sb.append("------------------------------------------------------------------------\n" );
+    	
+    	String sqlcmd = "SELECT nom, prenom, poste, idEquipe FROM Pompier WHERE  idEquipe = ?;";
+        PreparedStatement pstmt = dbConnection.prepareStatement(sqlcmd);
+        pstmt.setInt(1, equipeID); 
+        ResultSet rs = pstmt.executeQuery(); //le resultSet contient plusieurs enregistrements
+        
+        sb.append("nom     |   prénom    |              poste            |    id de l'équipe\n" );
+        sb.append("--------------------------------------------------------------------\n" );
+        while (rs.next()) {
+            String nom = rs.getString("nom"); 
+            String prenom = rs.getString("prenom");
+            String poste = rs.getString("poste"); 
+            String idEquipe = rs.getString("idEquipe"); 
+            sb.append(nom + "   |    " + prenom + "    |    " + poste + "    |    " + idEquipe);  
+            sb.append("\n");
+        }
+        // fermer le dataset
+        rs.close();
+        // fermer le prepared statement
+        pstmt.close();
+        return sb.toString();
+    }
+
     
 }

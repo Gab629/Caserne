@@ -104,6 +104,7 @@ CREATE TABLE Vehicule (
 	FOREIGN KEY (idEquipe) REFERENCES Equipe(idEquipe) on delete cascade
 	);
 
+
 CREATE TABLE Pompier (
 	idEmploye int PRIMARY KEY,
 	nom varchar (50) NOT NULL,
@@ -113,6 +114,11 @@ CREATE TABLE Pompier (
 	idEquipe int,
 	FOREIGN KEY (idEquipe) REFERENCES Equipe(idEquipe) on delete cascade
 	);
+
+SELECT * FROM Pompier;
+
+SELECT nom, prenom, poste, idEquipe FROM Pompier 
+WHERE idEquipe = 3;
 
 
 CREATE TABLE equipementPerso(
@@ -202,7 +208,7 @@ INSERT INTO Pompier (idEmploye, nom, prenom, numTel, poste, idEquipe)
 VALUES 
 (1, 'Dupont', 'Jean', '061-234-5678', 'Chef de Corps', 1),
 (2, 'Leclerc', 'Marie', '062-345-6789', 'Officier de garde', 2),
-(3, 'Martin', 'Pierre', '063-456-7890', 'Sapeur-Pompier', 3),
+(3, 'Martin', 'Pierre', '063-456-7890', 'Sapeur-Pompier', 2),
 (4, 'Moreau', 'Sophie', '064-567-8901', 'Sapeur-Pompier', 4),
 (5, 'Lemoine', 'Alexandre', '065-678-9012', 'Sapeur-Pompier', 5),
 (6, 'Bernard', 'Claire', '066-789-0123', 'Chef de garde', 6),
@@ -285,7 +291,7 @@ INSERT INTO Rapporte (incidentId, dateIncident, adresseIncident, numEmploye, idC
 select * from Rapporte;
 
 
-SELECT * FROM Pompier;
+
 
 --Lister les noms et prenoms des pompiers avec leur équipe, caserne et le secteur couvert par leur caserne
 

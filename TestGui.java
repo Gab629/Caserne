@@ -13,6 +13,11 @@ public class TestGui extends JFrame {
     private JButton btnAfficherSecteurs;
     private JTextArea taSecteurs;
 
+    // Pour les secteurs
+    private JButton btnAfficherPompierParEquipe;
+    private JTextArea taPompierParEquipe;
+    private JTextField tfIdEquipePompier;
+
 
     private static final long serialVersionUID = -4939544011287453046L;
     private DbConnection dbConnection;
@@ -36,6 +41,9 @@ public class TestGui extends JFrame {
         JPanel panelPompier = new JPanel(new FlowLayout());
         panelPompier.setLayout( new FlowLayout() );
 
+        // Panel pour les pompiers par quipe
+        JPanel panelPompierParEquipe = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
         // Le panel des secteurs
         JPanel panelSecteurs = new JPanel(new FlowLayout(FlowLayout.CENTER));
         
@@ -53,6 +61,14 @@ public class TestGui extends JFrame {
         btnSupprimer = new JButton("Supprimer");
         btnModifier = new JButton("Modifier");
         btnChercher = new JButton("Chercher");
+
+        // Pour les pompier par equipe
+        btnAfficherPompierParEquipe = new JButton("Afficher Pompiers par équipe");
+        tfIdEquipePompier = new JTextField(10);
+        taPompierParEquipe = new JTextArea(10, 50);
+        taPompierParEquipe.setEditable(false);
+        JScrollPane scrollPompierParEquipe = new JScrollPane(taPompierParEquipe);
+
 
         // Pour les secteurs
         btnAfficherSecteurs = new JButton("Afficher Secteurs");
@@ -79,6 +95,14 @@ public class TestGui extends JFrame {
         panelPompier.add(btnModifier);
         panelPompier.add(btnChercher);
 
+        //Pour les pompiers par equipe
+        panelPompierParEquipe.add(new JLabel("ID de l'équipe"));
+        panelPompierParEquipe.add(tfIdEquipePompier);
+        panelPompierParEquipe.add(scrollPompierParEquipe);
+        panelPompierParEquipe.add(btnAfficherPompierParEquipe);
+        panelPompier.add(panelPompierParEquipe);
+
+
         //Pour les secteurs
         panelSecteurs.add(btnAfficherSecteurs);
         panelSecteurs.add(scrollSecteurs);
@@ -88,6 +112,7 @@ public class TestGui extends JFrame {
 
         // Ajout des panels au panel principal
         panelPrincipal.add(panelPompier);
+        panelPrincipal.add(panelPompierParEquipe);
         panelPrincipal.add(panelSecteurs);
 
         
@@ -123,12 +148,28 @@ public class TestGui extends JFrame {
             }
         });
 
+        //Afficher les secteurs
         btnAfficherSecteurs.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 try {
                     String result = GestionCaserne.afficherSecteurs();
                     taSecteurs.setText(result);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Erreur lors de l'affichage des secteurs : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        //Afficher les pompiers par equipe
+        btnAfficherPompierParEquipe.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                try {
+                    int equipeID = Integer.parseInt(tfIdEquipePompier.getText());
+                    String result = GestionCaserne.afficherPompierDansEquipe(equipeID);
+                    taPompierParEquipe.setText(result);
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Erreur lors de l'affichage des secteurs : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -184,33 +225,6 @@ public class TestGui extends JFrame {
         }
     }
     
-//     private void ModifierAction() {
-//    	 try {
-//             int id = Integer.parseInt(tfId.getText());
-//             String nom = tfNom.getText();
-//             String prenom = tfPrenom.getText();
-//             if(nom.equals("") || prenom.equals("") ) {
-//             	 JOptionPane.showMessageDialog(this, "Vous devez remplir tous les champs pour modifier un employé","Erreur", JOptionPane.ERROR_MESSAGE);
-//             }
-//             else {
-//             	EmployeDAO.modifierEmploye(id, nom, prenom);
-//             }
-//         } catch (SQLException ex) {
-//             ex.printStackTrace();
-//             JOptionPane.showMessageDialog(this, "Erreur de recherche : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
-//         }
-//    }
-    
-//     private void chercherAction() {
-//     	 try {
-//              int id = Integer.parseInt(tfId.getText());
-//              JOptionPane.showMessageDialog(this, "Vous devez remplir le champ id pour chercher un employé","Erreur", JOptionPane.ERROR_MESSAGE);
-//              EmployeDAO.AfficheEmployeGui(id, tfNom, tfPrenom);
-//          } catch (SQLException ex) {
-//              ex.printStackTrace();
-//              JOptionPane.showMessageDialog(this, "Erreur de recherche : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
-//          }
-//     }
     
     private void FermerApplication() {
     	try {
