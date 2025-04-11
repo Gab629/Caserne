@@ -7,7 +7,7 @@ import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 public class TestGui extends JFrame {
 	
     private JTextField tfIDEmploye, tfNom, tfPrenom, tfposte, tfnumTel, tfIdEquipe;
-    private JButton btnInserer, btnSupprimer, btnModifier, btnChercher;
+    private JButton btnInsererPompier, btnSupprimerPompier, btnModifier, btnChercher;
 
     // Pour les secteurs
     private JButton btnAfficherSecteurs;
@@ -57,8 +57,8 @@ public class TestGui extends JFrame {
         tfposte = new JTextField(10);
         tfnumTel = new JTextField(12);
         tfIdEquipe = new JTextField(10);
-        btnInserer = new JButton("Insérer");
-        btnSupprimer = new JButton("Supprimer");
+        btnInsererPompier = new JButton("Insérer");
+        btnSupprimerPompier = new JButton("Supprimer");
         btnModifier = new JButton("Modifier");
         btnChercher = new JButton("Chercher");
 
@@ -78,6 +78,8 @@ public class TestGui extends JFrame {
 
         
         // Ajout des composants à la fenêtre
+
+        //Pour les pompiers 
         panelPompier.add(new JLabel("ID de l'employé"));
         panelPompier.add(tfIDEmploye);
         panelPompier.add(new JLabel("Nom"));
@@ -90,10 +92,8 @@ public class TestGui extends JFrame {
         panelPompier.add(tfnumTel);
         panelPompier.add(new JLabel("ID de l'équipe"));
         panelPompier.add(tfIdEquipe);
-        panelPompier.add(btnInserer);
-        panelPompier.add(btnSupprimer);
-        panelPompier.add(btnModifier);
-        panelPompier.add(btnChercher);
+        panelPompier.add(btnInsererPompier);
+        panelPompier.add(btnSupprimerPompier);
 
         //Pour les pompiers par equipe
         panelPompierParEquipe.add(new JLabel("ID de l'équipe"));
@@ -102,13 +102,10 @@ public class TestGui extends JFrame {
         panelPompierParEquipe.add(btnAfficherPompierParEquipe);
         panelPompier.add(panelPompierParEquipe);
 
-
         //Pour les secteurs
         panelSecteurs.add(btnAfficherSecteurs);
         panelSecteurs.add(scrollSecteurs);
         panelPompier.add(panelSecteurs);
-
-
 
         // Ajout des panels au panel principal
         panelPrincipal.add(panelPompier);
@@ -124,41 +121,23 @@ public class TestGui extends JFrame {
             }
         });
         
-        btnInserer.addActionListener(new ActionListener() {
+        btnInsererPompier.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                insererAction();
+                insererPompierAction();
             }
         });
         
-        btnSupprimer.addActionListener(new ActionListener() {
+        btnSupprimerPompier.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                supprimerAction();
+                supprimerPompierAction();
             }
         });
         
-        btnModifier.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // ModifierAction();
-            }
-        });
-        
-        btnChercher.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // chercherAction();
-            }
-        });
-
         //Afficher les secteurs
         btnAfficherSecteurs.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
-                try {
-                    String result = GestionCaserne.afficherSecteurs();
-                    taSecteurs.setText(result);
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Erreur lors de l'affichage des secteurs : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
-                }
+                AfficherSecteurs();
             }
         });
 
@@ -166,14 +145,7 @@ public class TestGui extends JFrame {
         btnAfficherPompierParEquipe.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
-                try {
-                    int equipeID = Integer.parseInt(tfIdEquipePompier.getText());
-                    String result = GestionCaserne.afficherPompierDansEquipe(equipeID);
-                    taPompierParEquipe.setText(result);
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Erreur lors de l'affichage des secteurs : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
-                }
+                AfficherPompierParEquipe();
             }
         });
         
@@ -192,7 +164,7 @@ public class TestGui extends JFrame {
     	}
     }
     
-    private void insererAction() {
+    private void insererPompierAction() {
         try {
             int idEmploye = Integer.parseInt(tfIDEmploye.getText());
             String nom = tfNom.getText();
@@ -213,7 +185,7 @@ public class TestGui extends JFrame {
         }
 }
     
-    private void supprimerAction() {
+    private void supprimerPompierAction() {
         try {
             int idEmploye = Integer.parseInt(tfIDEmploye.getText());
         	GestionCaserne.supprimerPompier(idEmploye);;
@@ -225,6 +197,26 @@ public class TestGui extends JFrame {
         }
     }
     
+private void AfficherPompierParEquipe() {
+    try {
+        int equipeID = Integer.parseInt(tfIdEquipePompier.getText());
+        String result = GestionCaserne.afficherPompierDansEquipe(equipeID);
+        taPompierParEquipe.setText(result);
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Erreur lors de l'affichage des secteurs : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+    }
+}
+
+private void AfficherSecteurs() {
+    try {
+        String result = GestionCaserne.afficherSecteurs();
+        taSecteurs.setText(result);
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Erreur lors de l'affichage des secteurs : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+    }
+}
     
     private void FermerApplication() {
     	try {
