@@ -7,7 +7,7 @@ import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 public class TestGui extends JFrame {
 	
     private JTextField tfIDEmploye, tfNom, tfPrenom, tfposte, tfnumTel, tfIdEquipe;
-    private JButton btnInsererPompier, btnSupprimerPompier, btnModifier, btnChercher;
+    private JButton btnInsererPompier, btnSupprimerPompier;
 
     // Pour les secteurs
     private JButton btnAfficherSecteurs;
@@ -18,6 +18,11 @@ public class TestGui extends JFrame {
     private JTextArea taPompierParEquipe;
     private JTextField tfIdEquipePompier;
 
+    private JTextField tfIDSecteur;
+    private JButton btnButtonCalculerNbIncident;
+
+
+
 
     private static final long serialVersionUID = -4939544011287453046L;
     private DbConnection dbConnection;
@@ -25,7 +30,7 @@ public class TestGui extends JFrame {
     
     public TestGui() {
     	
-    	super("Gestion Caserne Pompier");
+    	super("Gestion de la caserne de pompier");
     	setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.setSize( 600, 400 );
         this.setLocationRelativeTo( null );
@@ -46,6 +51,9 @@ public class TestGui extends JFrame {
 
         // Le panel des secteurs
         JPanel panelSecteurs = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+        // Le panel des incidents
+        JPanel panelIncidents = new JPanel(new FlowLayout(FlowLayout.CENTER));
         
 
 
@@ -59,8 +67,7 @@ public class TestGui extends JFrame {
         tfIdEquipe = new JTextField(10);
         btnInsererPompier = new JButton("Insérer");
         btnSupprimerPompier = new JButton("Supprimer");
-        btnModifier = new JButton("Modifier");
-        btnChercher = new JButton("Chercher");
+
 
         // Pour les pompier par equipe
         btnAfficherPompierParEquipe = new JButton("Afficher Pompiers par équipe");
@@ -76,8 +83,12 @@ public class TestGui extends JFrame {
         taSecteurs.setEditable(false);
         JScrollPane scrollSecteurs = new JScrollPane(taSecteurs);
 
+        //Pour les incidents
+        btnButtonCalculerNbIncident = new JButton("Calculer nombre d'incidents");
+        tfIDSecteur = new JTextField(10);
+
         
-        // Ajout des composants à la fenêtre
+        // Ajout des composants aux fenêtres
 
         //Pour les pompiers 
         panelPompier.add(new JLabel("ID de l'employé"));
@@ -107,10 +118,16 @@ public class TestGui extends JFrame {
         panelSecteurs.add(scrollSecteurs);
         panelPompier.add(panelSecteurs);
 
+        //Pour les incidents
+        panelIncidents.add(new JLabel("ID du secteur"));
+        panelIncidents.add(tfIDSecteur);
+        panelIncidents.add(btnButtonCalculerNbIncident);
+
         // Ajout des panels au panel principal
         panelPrincipal.add(panelPompier);
         panelPrincipal.add(panelPompierParEquipe);
         panelPrincipal.add(panelSecteurs);
+        panelPrincipal.add(panelIncidents);
 
         
         // Gestion des événements
@@ -148,6 +165,14 @@ public class TestGui extends JFrame {
                 AfficherPompierParEquipe();
             }
         });
+
+        //Afficher le nombre d'incidents par secteur
+        btnButtonCalculerNbIncident.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                calculerNombreIncident();
+            }
+        });
         
         pack();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -164,25 +189,25 @@ public class TestGui extends JFrame {
     	}
     }
     
-    private void insererPompierAction() {
-        try {
-            int idEmploye = Integer.parseInt(tfIDEmploye.getText());
-            String nom = tfNom.getText();
-            String prenom = tfPrenom.getText();
-            String poste = tfposte.getText();
-            String numTel = tfnumTel.getText();
-            int idEquipe = Integer.parseInt(tfIdEquipe.getText());
-            if(tfIDEmploye.getText().trim().isEmpty() || nom.equals("") || prenom.equals("") || poste.equals("") || numTel.equals("") || tfIdEquipe.getText().trim().isEmpty()) {
-           	 JOptionPane.showMessageDialog(this, "Vous devez remplir tous les champs pour insérer un pompier","Erreur", JOptionPane.ERROR_MESSAGE);
-           }
-           else {
-	            GestionCaserne.InsererPompier(idEmploye ,nom, prenom, poste, numTel, idEquipe);
-	            JOptionPane.showMessageDialog(this, "Employé inséré avec succès");
-           }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Erreur d'insertion : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+private void insererPompierAction() {
+    try {
+        int idEmploye = Integer.parseInt(tfIDEmploye.getText());
+        String nom = tfNom.getText();
+        String prenom = tfPrenom.getText();
+        String poste = tfposte.getText();
+        String numTel = tfnumTel.getText();
+        int idEquipe = Integer.parseInt(tfIdEquipe.getText());
+        if(tfIDEmploye.getText().trim().isEmpty() || nom.equals("") || prenom.equals("") || poste.equals("") || numTel.equals("") || tfIdEquipe.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vous devez remplir tous les champs pour insérer un pompier","Erreur", JOptionPane.ERROR_MESSAGE);
         }
+        else {
+            GestionCaserne.InsererPompier(idEmploye ,nom, prenom, poste, numTel, idEquipe);
+            JOptionPane.showMessageDialog(this, "Employé inséré avec succès");
+        }
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Erreur d'insertion : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+    }
 }
     
     private void supprimerPompierAction() {
@@ -218,6 +243,21 @@ private void AfficherSecteurs() {
     }
 }
     
+private void calculerNombreIncident() {
+    try {
+        int idSecteur = Integer.parseInt(tfIDSecteur.getText());
+        if(tfIDSecteur.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vous devez remplir le champs pour calculer les incidents","Erreur", JOptionPane.ERROR_MESSAGE);
+        }
+        else {
+            JOptionPane.showMessageDialog(this, GestionCaserne.afficherNbIncidentsDansSecteurs(idSecteur));
+        }
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Erreur : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+    }
+}
+
     private void FermerApplication() {
     	try {
         	//fermer la connexion à la BD

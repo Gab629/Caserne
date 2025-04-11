@@ -115,11 +115,6 @@ CREATE TABLE Pompier (
 	FOREIGN KEY (idEquipe) REFERENCES Equipe(idEquipe) on delete cascade
 	);
 
-SELECT * FROM Pompier;
-
-SELECT nom, prenom, poste, idEquipe FROM Pompier 
-WHERE idEquipe = 3;
-
 
 CREATE TABLE equipementPerso(
 	idEquipement int,
@@ -153,7 +148,8 @@ VALUES
 (5, 'Gaz toxique', '2025-03-19', 1, '30 Rue Saint-Denis, Montréal, QC', 4),
 (6, 'Accident industriel', '2025-03-20', 2, 'Rue Jean-Talon O, Montréal, QC', 6),
 (7, 'Feu', '2025-03-21', 2, 'Rue Saint-Laurent, Montréal, QC', 1),
-(8, 'Explosion', '2025-03-22', 1, '1500 Boulevard René-Lévesque O, Montréal, QC', 8);
+(8, 'Explosion', '2025-03-22', 1, '1500 Boulevard René-Lévesque O, Montréal, QC', 8),
+(9, 'Explosion', '2025-03-22', 1, '1500 Boulevard René-Lévesque O, Montréal, QC', 6);
 select * from Incident;
 SET IDENTITY_INSERT Incident OFF;
 
@@ -416,6 +412,7 @@ END;
 GO
 
 SELECT dbo.compterIncidentsSecteur(6) AS VieuxQuartier;
+
 
 
 -- declencheur : mise a jour automatique du statut d’un equipement expire lors d’un UPDATE 

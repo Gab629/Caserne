@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 public class GestionCaserne {
     
+    //Afficher tous les secteurs
     public static String afficherSecteurs() throws SQLException {
     	DbConnection dbConnection = DbConnection.getInstance();
 
@@ -32,7 +33,7 @@ public class GestionCaserne {
         return sb.toString();
     }
 
-    //INSERT
+    //Insérer un pompier dans une équipe
     public static void InsererPompier(int idEmploye, String nom,  String prenom, String poste, String numTel, int idEquipe) throws SQLException {
     	DbConnection dbConnection = DbConnection.getInstance();
     	System.out.println("-----------------------------------------" );
@@ -59,7 +60,7 @@ public class GestionCaserne {
         System.out.println("Insertion terminée, " + nbLignesAffectees + " Ligne(s) affectée(s)\n\n");
     }
 
-    //DELETE
+    //Supprimer un pompier
     public static void supprimerPompier (int idEmploye) throws SQLException{
     	DbConnection dbConnection = DbConnection.getInstance();
     	System.out.println("--------------------------------------------------" );
@@ -79,6 +80,7 @@ public class GestionCaserne {
         System.out.println("Suppression terminée, " + nbLignesAffectees + " Ligne(s) affectée(s)\n\n");;
     }
 
+    //Afficher les pompiers d'une équipe
     public static String afficherPompierDansEquipe(int equipeID) throws SQLException {
     	DbConnection dbConnection = DbConnection.getInstance();
 
@@ -102,6 +104,31 @@ public class GestionCaserne {
             sb.append(nom + "   |    " + prenom + "    |    " + poste + "    |    " + idEquipe);  
             sb.append("\n");
         }
+        // fermer le dataset
+        rs.close();
+        // fermer le prepared statement
+        pstmt.close();
+        return sb.toString();
+    }
+
+    //Compter incidents dans secteurs
+    public static String afficherNbIncidentsDansSecteurs(int secteurID) throws SQLException {
+    	DbConnection dbConnection = DbConnection.getInstance();
+        StringBuilder sb = new StringBuilder();
+    	
+    	String sqlcmd = "SELECT dbo.compterIncidentsSecteur(?) AS [Nombre d'incidents];";
+        PreparedStatement pstmt = dbConnection.prepareStatement(sqlcmd);
+        pstmt.setInt(1, secteurID); 
+        ResultSet rs = pstmt.executeQuery();
+
+        //rs.next() permet d'accéder à la première ligne de résultat
+        if (rs.next()) {
+            String nbIncidents = rs.getString("Nombre d'incidents");
+            sb.append("Nombre d'incidents dans le secteur: ").append(nbIncidents);
+        } else {
+            sb.append("Aucun incident trouvé pour ce secteur.");
+        }
+        
         // fermer le dataset
         rs.close();
         // fermer le prepared statement
