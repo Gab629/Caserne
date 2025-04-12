@@ -136,5 +136,28 @@ public class GestionCaserne {
         return sb.toString();
     }
 
+    // Afficher les équipements expirés
+    public static String afficherEquipementsExpirés() throws SQLException {
+        DbConnection dbConnection = DbConnection.getInstance();
+        StringBuilder sb = new StringBuilder();
+
+        String sqlcmd = "SELECT idEquipement, typeEquipement, date_expiration FROM Equipement WHERE date_expiration < GETDATE();";
+        PreparedStatement pstmt = dbConnection.prepareStatement(sqlcmd);
+        ResultSet rs = pstmt.executeQuery();
+
+        sb.append("ID | Type | Date d'expiration\n");
+        sb.append("-----------------------------------\n");
+
+        while (rs.next()) {
+            sb.append(rs.getInt("idEquipement")).append(" | ")
+            .append(rs.getString("typeEquipement")).append(" | ")
+            .append(rs.getDate("date_expiration")).append("\n");
+        }
+
+        rs.close();
+        pstmt.close();
+        return sb.toString();
+    }
+
     
 }
