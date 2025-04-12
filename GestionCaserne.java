@@ -1,6 +1,8 @@
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class GestionCaserne {
     
@@ -159,5 +161,75 @@ public class GestionCaserne {
         return sb.toString();
     }
 
-    
+    public static String incidentsAvecRenfort() throws SQLException {
+        StringBuilder sb = new StringBuilder();
+        Connection conn = DbConnection.getInstance().getConnection();
+
+        String query = "SELECT Incident.typeIncident, caserne1.nomCaserne AS CaserneInitiale, " +
+                    "caserne2.nomCaserne AS CaserneRenfort, RepartiteurUrgence.nom " +
+                    "FROM Rapporte " +
+                    "JOIN Incident ON Rapporte.incidentId = Incident.incidentId " +
+                    "JOIN Caserne caserne1 ON Rapporte.idCaserne = caserne1.idCaserne " +
+                    "JOIN Caserne caserne2 ON Rapporte.CaserneRenfort = caserne2.idCaserne " +
+                    "JOIN RepartiteurUrgence ON Rapporte.numEmploye = RepartiteurUrgence.numEmploye " +
+                    "WHERE Rapporte.CaserneRenfort IS NOT NULL";
+
+        try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
+            while (rs.next()) {
+                sb.append("Incident: ").append(rs.getString("typeIncident"))
+                .append(" | Caserne initiale: ").append(rs.getString("CaserneInitiale"))
+                .append(" | Renfort: ").append(rs.getString("CaserneRenfort"))
+                .append(" | Répartiteur: ").append(rs.getString("nom")).append("\n");
+            }
+        }
+
+        return sb.toString();
+    }
+
+    public static String equipementsParEquipe(int idEquipe) throws SQLException {
+        StringBuilder sb = new StringBuilder();
+        Connection conn = DbConnection.getInstance().getConnection();
+
+        String query = "SELECT e.idEquipement, e.typeEquipement, e.statutDisponibilite, e.date_expiration " +
+                    "FROM Equipement e " +
+                    "JOIN equipementTeam et ON e.idEquipement = et.idEquipement " +
+                    "WHERE et.idEquipe = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, idEquipe);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                sb.append("ID: ").append(rs.getInt("idEquipement"))
+                .append(" | Type: ").append(rs.getString("typeEquipement"))
+                .append(" | Statut: ").append(rs.getString("statutDisponibilite"))
+                .append(" | Expire le: ").append(rs.getDate("date_expiration")).append("\n");
+            }
+        }
+
+        return sb.toString();
+    }
+
+
+    public static String vehiculesParEquipe(int idEquipe) throws SQLException {
+        StringBuilder sb = new StringBuilder();
+        Connection conn = DbConnection.getInstance().getConnection();
+
+        String query = "SELECT idVehicule, typeVehicule, plaque_immatriculation " +
+                    "FROM Vehicule WHERE idEquipe = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, idEquipe);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                sb.append("ID: ").append(rs.getInt("idVehicule"))
+                .append(" | Type: ").append(rs.getString("typeVehicule"))
+                .append(" | Plaque: ").append(rs.getString("plaque_immatriculation")).append("\n");
+            }
+        }
+
+        return sb.toString();
+    }
+
 }
