@@ -1,262 +1,187 @@
-import java.awt.FlowLayout;
+import java.awt.*;
 import java.awt.event.*;
 import java.sql.SQLException;
 import javax.swing.*;
+import javax.swing.border.*;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
+
 public class TestGui extends JFrame {
-	
+
+    // === Champs texte pour les pompiers ===
     private JTextField tfIDEmploye, tfNom, tfPrenom, tfposte, tfnumTel, tfIdEquipe;
     private JButton btnInsererPompier, btnSupprimerPompier;
 
-    // Pour les secteurs
+    // === Secteurs ===
     private JButton btnAfficherSecteurs;
     private JTextArea taSecteurs;
 
-    // Pour les secteurs
+    // === Pompiers par équipe ===
     private JButton btnAfficherPompierParEquipe;
     private JTextArea taPompierParEquipe;
     private JTextField tfIdEquipePompier;
 
+    // === Incidents ===
     private JTextField tfIDSecteur;
     private JButton btnButtonCalculerNbIncident;
 
+    // === Nouveauté : Affichage des équipements expirés ===
+    private JButton btnAfficherEquipementsExpirés;
+    private JTextArea taEquipements;
 
-
-
+    // === Gestion de la base de données ===
     private static final long serialVersionUID = -4939544011287453046L;
     private DbConnection dbConnection;
-    
-    
-    public TestGui() {
-    	
-    	super("Gestion de la caserne de pompier");
-    	setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        this.setSize( 600, 400 );
-        this.setLocationRelativeTo( null );
-        this.setResizable(false);
-        
 
-        // Le panel principal empile tout verticalement
+    // === Couleurs et polices pour une interface améliorée ===
+    private final Color rougeBordeaux = new Color(128, 0, 32);
+    private final Color grisClair = new Color(245, 245, 245);
+    private final Font fontTitre = new Font("Arial", Font.BOLD, 14);
+    private final Font fontTexte = new Font("Arial", Font.PLAIN, 12);
+
+    public TestGui() {
+        super("🚒 Gestion de la caserne de pompiers");
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        setSize(900, 900);
+        setLocationRelativeTo(null);
+        setResizable(false);
+
         JPanel panelPrincipal = new JPanel();
         panelPrincipal.setLayout(new BoxLayout(panelPrincipal, BoxLayout.Y_AXIS));
-        this.setContentPane(panelPrincipal);  
-        
-        // Panel pour les pompiers 
-        JPanel panelPompier = new JPanel(new FlowLayout());
-        panelPompier.setLayout( new FlowLayout() );
+        panelPrincipal.setBackground(Color.WHITE);
+        setContentPane(panelPrincipal);
 
-        // Panel pour les pompiers par quipe
-        JPanel panelPompierParEquipe = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        Border bordureRouge = BorderFactory.createLineBorder(rougeBordeaux, 2);
+        EmptyBorder margeInterne = new EmptyBorder(10, 10, 10, 10);
 
-        // Le panel des secteurs
-        JPanel panelSecteurs = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        // === Panel pour gestion des pompiers ===
+        JPanel panelPompier = new JPanel(new GridLayout(4, 4, 10, 10));
+        panelPompier.setBorder(BorderFactory.createTitledBorder(bordureRouge, "Gestion des pompiers", TitledBorder.LEFT, TitledBorder.TOP, fontTitre, rougeBordeaux));
+        panelPompier.setBackground(grisClair);
 
-        // Le panel des incidents
-        JPanel panelIncidents = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        
+        tfIDEmploye = new JTextField(10); tfNom = new JTextField(10); tfPrenom = new JTextField(10); tfposte = new JTextField(10);
+        tfnumTel = new JTextField(12); tfIdEquipe = new JTextField(10);
 
-
-        
-        // Création des composants
-        tfIDEmploye = new JTextField(10);
-        tfNom = new JTextField(10);
-        tfPrenom = new JTextField(10);
-        tfposte = new JTextField(10);
-        tfnumTel = new JTextField(12);
-        tfIdEquipe = new JTextField(10);
-        btnInsererPompier = new JButton("Insérer");
+        btnInsererPompier = new JButton("+ Insérer");
         btnSupprimerPompier = new JButton("Supprimer");
+        styliserBouton(btnInsererPompier);
+        styliserBouton(btnSupprimerPompier);
 
+        panelPompier.add(new JLabel("ID Employé:")); panelPompier.add(tfIDEmploye);
+        panelPompier.add(new JLabel("Nom:")); panelPompier.add(tfNom);
+        panelPompier.add(new JLabel("Prénom:")); panelPompier.add(tfPrenom);
+        panelPompier.add(new JLabel("Poste:")); panelPompier.add(tfposte);
+        panelPompier.add(new JLabel("Numéro Tel:")); panelPompier.add(tfnumTel);
+        panelPompier.add(new JLabel("ID Équipe:")); panelPompier.add(tfIdEquipe);
+        panelPompier.add(btnInsererPompier); panelPompier.add(btnSupprimerPompier);
 
-        // Pour les pompier par equipe
-        btnAfficherPompierParEquipe = new JButton("Afficher Pompiers par équipe");
+        // === Panel Pompiers par Équipe ===
+        JPanel panelPompierParEquipe = new JPanel(new BorderLayout());
+        panelPompierParEquipe.setBorder(BorderFactory.createTitledBorder(bordureRouge, "Pompiers par Équipe", TitledBorder.LEFT, TitledBorder.TOP, fontTitre, rougeBordeaux));
+        panelPompierParEquipe.setBackground(Color.WHITE);
+
+        JPanel ligneRechercheEquipe = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        ligneRechercheEquipe.setBackground(Color.DARK_GRAY);
+        ligneRechercheEquipe.setBorder(margeInterne);
+        JLabel labelEquipe = new JLabel("ID Équipe:");
+        labelEquipe.setForeground(Color.WHITE);
         tfIdEquipePompier = new JTextField(10);
-        taPompierParEquipe = new JTextArea(10, 50);
-        taPompierParEquipe.setEditable(false);
+        btnAfficherPompierParEquipe = new JButton("Afficher");
+        styliserBouton(btnAfficherPompierParEquipe);
+        ligneRechercheEquipe.add(labelEquipe);
+        ligneRechercheEquipe.add(tfIdEquipePompier);
+        ligneRechercheEquipe.add(btnAfficherPompierParEquipe);
+
+        taPompierParEquipe = new JTextArea(8, 50);
+        taPompierParEquipe.setFont(fontTexte); taPompierParEquipe.setEditable(false);
         JScrollPane scrollPompierParEquipe = new JScrollPane(taPompierParEquipe);
+        panelPompierParEquipe.add(ligneRechercheEquipe, BorderLayout.NORTH);
+        panelPompierParEquipe.add(scrollPompierParEquipe, BorderLayout.CENTER);
 
+        // === Panel Secteurs ===
+        JPanel panelSecteurs = new JPanel(new BorderLayout());
+        panelSecteurs.setBorder(BorderFactory.createTitledBorder(bordureRouge, "Affichage des Secteurs", TitledBorder.LEFT, TitledBorder.TOP, fontTitre, rougeBordeaux));
+        panelSecteurs.setBackground(Color.WHITE);
 
-        // Pour les secteurs
         btnAfficherSecteurs = new JButton("Afficher Secteurs");
-        taSecteurs = new JTextArea(10, 50);
-        taSecteurs.setEditable(false);
+        styliserBouton(btnAfficherSecteurs);
+        taSecteurs = new JTextArea(5, 50);
+        taSecteurs.setFont(fontTexte); taSecteurs.setEditable(false);
         JScrollPane scrollSecteurs = new JScrollPane(taSecteurs);
+        panelSecteurs.add(btnAfficherSecteurs, BorderLayout.NORTH);
+        panelSecteurs.add(scrollSecteurs, BorderLayout.CENTER);
 
-        //Pour les incidents
-        btnButtonCalculerNbIncident = new JButton("Calculer nombre d'incidents");
+        // === Panel Incidents ===
+        JPanel panelIncidents = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panelIncidents.setBorder(BorderFactory.createTitledBorder(bordureRouge, "Incidents", TitledBorder.LEFT, TitledBorder.TOP, fontTitre, rougeBordeaux));
+        panelIncidents.setBackground(grisClair);
+
         tfIDSecteur = new JTextField(10);
-
-        
-        // Ajout des composants aux fenêtres
-
-        //Pour les pompiers 
-        panelPompier.add(new JLabel("ID de l'employé"));
-        panelPompier.add(tfIDEmploye);
-        panelPompier.add(new JLabel("Nom"));
-        panelPompier.add(tfNom);
-        panelPompier.add(new JLabel("Prénom"));
-        panelPompier.add(tfPrenom);
-        panelPompier.add(new JLabel("Poste"));
-        panelPompier.add(tfposte);
-        panelPompier.add(new JLabel("numTel"));
-        panelPompier.add(tfnumTel);
-        panelPompier.add(new JLabel("ID de l'équipe"));
-        panelPompier.add(tfIdEquipe);
-        panelPompier.add(btnInsererPompier);
-        panelPompier.add(btnSupprimerPompier);
-
-        //Pour les pompiers par equipe
-        panelPompierParEquipe.add(new JLabel("ID de l'équipe"));
-        panelPompierParEquipe.add(tfIdEquipePompier);
-        panelPompierParEquipe.add(scrollPompierParEquipe);
-        panelPompierParEquipe.add(btnAfficherPompierParEquipe);
-        panelPompier.add(panelPompierParEquipe);
-
-        //Pour les secteurs
-        panelSecteurs.add(btnAfficherSecteurs);
-        panelSecteurs.add(scrollSecteurs);
-        panelPompier.add(panelSecteurs);
-
-        //Pour les incidents
-        panelIncidents.add(new JLabel("ID du secteur"));
+        btnButtonCalculerNbIncident = new JButton("Calculer");
+        styliserBouton(btnButtonCalculerNbIncident);
+        panelIncidents.add(new JLabel("ID Secteur:"));
         panelIncidents.add(tfIDSecteur);
         panelIncidents.add(btnButtonCalculerNbIncident);
 
-        // Ajout des panels au panel principal
+        // === Panel Équipements Expirés ===
+        JPanel panelEquipements = new JPanel(new BorderLayout());
+        panelEquipements.setBorder(BorderFactory.createTitledBorder(bordureRouge, "Équipements Expirés", TitledBorder.LEFT, TitledBorder.TOP, fontTitre, rougeBordeaux));
+        panelEquipements.setBackground(Color.WHITE);
+
+        btnAfficherEquipementsExpirés = new JButton("Afficher");
+        styliserBouton(btnAfficherEquipementsExpirés);
+        taEquipements = new JTextArea(5, 50);
+        taEquipements.setFont(fontTexte); taEquipements.setEditable(false);
+        JScrollPane scrollEquipements = new JScrollPane(taEquipements);
+        panelEquipements.add(btnAfficherEquipementsExpirés, BorderLayout.NORTH);
+        panelEquipements.add(scrollEquipements, BorderLayout.CENTER);
+
+        // === Ajout des panels au panel principal ===
         panelPrincipal.add(panelPompier);
         panelPrincipal.add(panelPompierParEquipe);
         panelPrincipal.add(panelSecteurs);
         panelPrincipal.add(panelIncidents);
+        panelPrincipal.add(panelEquipements);
 
-        
-        // Gestion des événements
+        // === Événements ===
         addWindowListener(new WindowAdapter() {
-            @Override
             public void windowClosing(WindowEvent e) {
                 FermerApplication();
             }
         });
-        
-        btnInsererPompier.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                insererPompierAction();
-            }
-        });
-        
-        btnSupprimerPompier.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                supprimerPompierAction();
-            }
-        });
-        
-        //Afficher les secteurs
-        btnAfficherSecteurs.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e)
-            {
-                AfficherSecteurs();
+
+        btnInsererPompier.addActionListener(e -> insererPompierAction());
+        btnSupprimerPompier.addActionListener(e -> supprimerPompierAction());
+        btnAfficherSecteurs.addActionListener(e -> AfficherSecteurs());
+        btnAfficherPompierParEquipe.addActionListener(e -> AfficherPompierParEquipe());
+        btnButtonCalculerNbIncident.addActionListener(e -> calculerNombreIncident());
+        btnAfficherEquipementsExpirés.addActionListener(e -> {
+            try {
+                taEquipements.setText(GestionCaserne.afficherEquipementsExpirés());
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Erreur : " + ex.getMessage());
             }
         });
 
-        //Afficher les pompiers par equipe
-        btnAfficherPompierParEquipe.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e)
-            {
-                AfficherPompierParEquipe();
-            }
-        });
-
-        //Afficher le nombre d'incidents par secteur
-        btnButtonCalculerNbIncident.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e)
-            {
-                calculerNombreIncident();
-            }
-        });
-        
-        pack();
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setVisible(true);
-    	
-    	try {
-        	//commecer par créer une connexion à la BD 
-        	dbConnection = DbConnection.getInstance();
-        	System.out.println("Connexion à la BD ouverte avec Succés");
-    	}
-    	catch (SQLException e) { //une gestion simple des erreurs de la BD
-	        System.err.println("Erreur de BD: " + e.getMessage());
-	        e.printStackTrace();
-    	}
-    }
-    
-private void insererPompierAction() {
-    try {
-        int idEmploye = Integer.parseInt(tfIDEmploye.getText());
-        String nom = tfNom.getText();
-        String prenom = tfPrenom.getText();
-        String poste = tfposte.getText();
-        String numTel = tfnumTel.getText();
-        int idEquipe = Integer.parseInt(tfIdEquipe.getText());
-        if(tfIDEmploye.getText().trim().isEmpty() || nom.equals("") || prenom.equals("") || poste.equals("") || numTel.equals("") || tfIdEquipe.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vous devez remplir tous les champs pour insérer un pompier","Erreur", JOptionPane.ERROR_MESSAGE);
-        }
-        else {
-            GestionCaserne.InsererPompier(idEmploye ,nom, prenom, poste, numTel, idEquipe);
-            JOptionPane.showMessageDialog(this, "Employé inséré avec succès");
-        }
-    } catch (SQLException ex) {
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Erreur d'insertion : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
-    }
-}
-    
-    private void supprimerPompierAction() {
         try {
-            int idEmploye = Integer.parseInt(tfIDEmploye.getText());
-        	GestionCaserne.supprimerPompier(idEmploye);;
-            JOptionPane.showMessageDialog(this, "Employé supprimé avec succès");
-            
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Erreur de suppression : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+            dbConnection = DbConnection.getInstance();
+            System.out.println("Connexion à la BD ouverte avec Succès");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Connexion échouée : " + e.getMessage());
         }
-    }
-    
-private void AfficherPompierParEquipe() {
-    try {
-        int equipeID = Integer.parseInt(tfIdEquipePompier.getText());
-        String result = GestionCaserne.afficherPompierDansEquipe(equipeID);
-        taPompierParEquipe.setText(result);
-    } catch (SQLException ex) {
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Erreur lors de l'affichage des secteurs : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
-    }
-}
 
-private void AfficherSecteurs() {
-    try {
-        String result = GestionCaserne.afficherSecteurs();
-        taSecteurs.setText(result);
-    } catch (SQLException ex) {
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Erreur lors de l'affichage des secteurs : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+        pack();
+        setVisible(true);
     }
-}
-    
-private void calculerNombreIncident() {
-    try {
-        int idSecteur = Integer.parseInt(tfIDSecteur.getText());
-        if(tfIDSecteur.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vous devez remplir le champs pour calculer les incidents","Erreur", JOptionPane.ERROR_MESSAGE);
-        }
-        else {
-            JOptionPane.showMessageDialog(this, GestionCaserne.afficherNbIncidentsDansSecteurs(idSecteur));
-        }
-    } catch (SQLException ex) {
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Erreur : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+
+    // === Style pour les boutons ===
+    private void styliserBouton(JButton bouton) {
+        bouton.setBackground(rougeBordeaux);
+        bouton.setForeground(Color.WHITE);
+        bouton.setFocusPainted(false);
+        bouton.setFont(new Font("Arial", Font.BOLD, 12));
+        bouton.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
     }
-}
 
     private void FermerApplication() {
     	try {
@@ -272,13 +197,63 @@ private void calculerNombreIncident() {
     	dispose();
 		
 	}
-    
-    public static void main(String[] args) throws Exception {
-        // Apply a look'n feel
-        UIManager.setLookAndFeel( new NimbusLookAndFeel() );
-        
-        // Start my window
-        TestGui myWindow = new TestGui();
-        myWindow.setVisible( true );
+
+
+    private void insererPompierAction() {
+        try {
+            int idEmploye = Integer.parseInt(tfIDEmploye.getText());
+            String nom = tfNom.getText(), prenom = tfPrenom.getText(), poste = tfposte.getText(), numTel = tfnumTel.getText();
+            int idEquipe = Integer.parseInt(tfIdEquipe.getText());
+            if (nom.isEmpty() || prenom.isEmpty() || poste.isEmpty() || numTel.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Tous les champs doivent être remplis", "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            GestionCaserne.InsererPompier(idEmploye, nom, prenom, poste, numTel, idEquipe);
+            JOptionPane.showMessageDialog(this, "Employé inséré avec succès");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erreur : " + e.getMessage());
+        }
     }
+
+    private void supprimerPompierAction() {
+        try {
+            int id = Integer.parseInt(tfIDEmploye.getText());
+            GestionCaserne.supprimerPompier(id);
+            JOptionPane.showMessageDialog(this, "Employé supprimé avec succès");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erreur : " + e.getMessage());
+        }
+    }
+
+    private void AfficherSecteurs() {
+        try {
+            taSecteurs.setText(GestionCaserne.afficherSecteurs());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erreur : " + e.getMessage());
+        }
+    }
+
+    private void AfficherPompierParEquipe() {
+        try {
+            int id = Integer.parseInt(tfIdEquipePompier.getText());
+            taPompierParEquipe.setText(GestionCaserne.afficherPompierDansEquipe(id));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erreur : " + e.getMessage());
+        }
+    }
+
+    private void calculerNombreIncident() {
+        try {
+            int idSecteur = Integer.parseInt(tfIDSecteur.getText());
+            JOptionPane.showMessageDialog(this, GestionCaserne.afficherNbIncidentsDansSecteurs(idSecteur));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erreur : " + e.getMessage());
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        UIManager.setLookAndFeel(new NimbusLookAndFeel());
+        new TestGui(); // pas besoin d’appeler setVisible ici déjà fait dans le constructeur
+    }
+
 }
