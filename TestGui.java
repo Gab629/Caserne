@@ -168,7 +168,7 @@ public class TestGui extends JFrame {
 
         // Panel incidents avec secteur et caserne
         JPanel panelIncidentsSecteurCaserne = new JPanel(new BorderLayout());
-        btnListerIncidents = new JButton("Afficher incidents par secteur et caserne"); styliserBouton(btnListerIncidents);
+        btnListerIncidents = new JButton("Afficher incidents avec secteur et caserne"); styliserBouton(btnListerIncidents);
         taListeIncidents = new JTextArea(8, 50); // 8 lignes, 50 colonnes visibles
         taListeIncidents.setEditable(false);
         scrollListeIncidents = new JScrollPane(taListeIncidents);

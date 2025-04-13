@@ -1,29 +1,43 @@
 {
-    "version": "0.2.0",
-    "configurations": [
+  "version": "0.2.0",
+  "configurations": [
       {
-        "type": "java",
-        "name": "TestGui",
-        "request": "launch",
-        "mainClass": "TestGui",
-        "projectName": "Caserne_6365b640",
-        "vmArgs": "-Djava.library.path=library",
-        "classPaths": [
-          "${workspaceFolder}/library/mssql-jdbc-12.6.0.jre8.jar",
-          "${workspaceFolder}/out"
-        ]
-  
+          "type": "java",
+          "name": "TestGui",
+          "request": "launch",
+          "mainClass": "TestGui",
+          "projectName": "Caserne_62c84769",
+          "vmArgs": "-Djava.library.path=${workspaceFolder}/library"
       },
       {
-        "type": "java",
-        "name": "Run TestCli avec DLL",
-        "request": "launch",
-        "mainClass": "TestCli",
-        "vmArgs": "-Djava.library.path=library",
-        "classPaths": [
-          "${workspaceFolder}/library/mssql-jdbc-12.6.0.jre8.jar",
-          "${workspaceFolder}/out"
-        ]
+          "type": "java",
+          "name": "TestCli",
+          "request": "launch",
+          "mainClass": "TestCli",
+          "projectName": "Caserne_70c050fd"
+      },
+      {
+          "type": "java",
+          "name": "Current File",
+          "request": "launch",
+          "mainClass": "${file}",
+          "vmArgs": "-Djava.library.path=${workspaceFolder}/library"
+      },
+      {
+          "type": "java",
+          "name": "TestCli",
+          "request": "launch",
+          "mainClass": "TestCli",
+          "projectName": "Caserne_62c84769",
+          "vmArgs": 
+              "-Djava.library.path=${workspaceFolder}/library",
+
+          "classPaths": [
+              "${workspaceFolder}/out",
+              "${workspaceFolder}/library/mssql-jdbc-12.10.0.jre8.jar",
+              "${workspaceFolder}/library/mssql-jdbc-12.10.0.jre11.jar",
+              "${workspaceFolder}/library/mssql-jdbc-12.6.0.jre8.jar"
+          ]
       }
-    ]
-  }
+  ]
+}
