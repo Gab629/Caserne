@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Connection;
 import java.sql.SQLException;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -33,6 +34,11 @@ public class TestGui extends JFrame {
     private JTextArea taRapports, taEquipementsEquipe, taVehiculesEquipe;
     private JTextField tfEquipeEquipement, tfEquipeVehicule;
 
+    //Incidents par secteur et caserne 
+    private JButton btnListerIncidents;
+    private JTextArea taListeIncidents;
+    private JScrollPane scrollListeIncidents;
+
     private static final long serialVersionUID = -4939544011287453046L;
     private DbConnection dbConnection;
 
@@ -42,6 +48,7 @@ public class TestGui extends JFrame {
     private final Font fontTitre = new Font("Arial", Font.BOLD, 14);
     private final Font fontTexte = new Font("Arial", Font.PLAIN, 12);
 
+    
     public TestGui() {
         super("\uD83D\uDEA8 Gestion de la caserne de pompiers");
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -159,6 +166,17 @@ public class TestGui extends JFrame {
         panelVehiculesEquipe.add(topVeh, BorderLayout.NORTH);
         panelVehiculesEquipe.add(new JScrollPane(taVehiculesEquipe), BorderLayout.CENTER);
 
+        // Panel incidents avec secteur et caserne
+        JPanel panelIncidentsSecteurCaserne = new JPanel(new BorderLayout());
+        btnListerIncidents = new JButton("Afficher incidents par secteur et caserne"); styliserBouton(btnListerIncidents);
+        taListeIncidents = new JTextArea(8, 50); // 8 lignes, 50 colonnes visibles
+        taListeIncidents.setEditable(false);
+        scrollListeIncidents = new JScrollPane(taListeIncidents);
+        panelIncidentsSecteurCaserne.add(btnListerIncidents, BorderLayout.NORTH);
+        panelIncidentsSecteurCaserne.add(scrollListeIncidents, BorderLayout.CENTER);
+        panelIncidentsSecteurCaserne.setBorder(BorderFactory.createTitledBorder(bordureRouge, "Afficher incidents par secteur et caserne", TitledBorder.LEFT, TitledBorder.TOP, fontTitre, rougeBordeaux));
+        panelIncidentsSecteurCaserne.setBackground(Color.WHITE);
+
         // Ajout des panels au panel principal
         panelPrincipal.add(panelPompier);
         panelPrincipal.add(panelPompierParEquipe);
@@ -168,6 +186,8 @@ public class TestGui extends JFrame {
         panelPrincipal.add(panelRapports);
         panelPrincipal.add(panelEquipementsEquipe);
         panelPrincipal.add(panelVehiculesEquipe);
+        panelPrincipal.add(panelIncidentsSecteurCaserne);
+
 
         // Fermeture sécurisée de la fenêtre
         addWindowListener(new WindowAdapter() {
@@ -182,6 +202,7 @@ public class TestGui extends JFrame {
         btnAfficherSecteurs.addActionListener(e -> AfficherSecteurs());
         btnAfficherPompierParEquipe.addActionListener(e -> AfficherPompierParEquipe());
         btnButtonCalculerNbIncident.addActionListener(e -> calculerNombreIncident());
+        btnListerIncidents.addActionListener(e -> afficherIncidentsAvecSecteurEtCaserne());
 
         btnAfficherEquipementsExpirés.addActionListener(e -> {
             try {
@@ -223,6 +244,21 @@ public class TestGui extends JFrame {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Connexion échouée : " + e.getMessage());
         }
+
+        btnListerIncidents.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Connection con = DbConnection.getInstance().getConnection();
+                    String result = GestionCaserne.afficherIncidentsAvecSecteurEtCaserne(con);
+                    taListeIncidents.setText(result);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null,
+                            "Erreur lors de l'affichage des incidents : " + ex.getMessage(),
+                            "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
 
         pack();
         setVisible(true);
@@ -310,4 +346,19 @@ public class TestGui extends JFrame {
         UIManager.setLookAndFeel(new NimbusLookAndFeel());
         new TestGui();
     }
+
+    //Affichage des incidents avec secteur et caserne
+    private void afficherIncidentsAvecSecteurEtCaserne() {
+        try {
+            Connection con = DbConnection.getInstance().getConnection();
+            String result = GestionCaserne.afficherIncidentsAvecSecteurEtCaserne(con);
+            taListeIncidents.setText(result);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                "Erreur lors de l'affichage des incidents : " + ex.getMessage(),
+                "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
 }
